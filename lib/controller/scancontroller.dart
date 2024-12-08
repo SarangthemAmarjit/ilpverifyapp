@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:geolocator/geolocator.dart';
+import 'package:ilpverifyapp/pages/applicantprofile.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -9,9 +11,24 @@ import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
 
 class Scancontroller extends GetxController {
-  IlPmodel? alldata;
+  IlPmodel? allgetiltpdata;
+
+
+  bool _isvalided = false;
+  bool get isvalided => _isvalided;
+
+    bool _isfake = false;
+  bool get isfake => _isfake;
   // Scanned data
-  var scannedModel = Rxn<QrScannerModel>();
+  QrScannerModel? scannedModel;
+
+  RxString locationStatus = ''.obs; // Observable to track location status
+
+  @override
+  void onInit() {
+    super.onInit();
+    checkLocationPermission(); // Call permission check when the controller initializes
+  }
 
   bool isSameDate(DateTime? date1, DateTime? date2) {
     if (date1 == null || date2 == null) return false;
@@ -28,18 +45,23 @@ class Scancontroller extends GetxController {
       if (response.statusCode == 200) {
         print(response.body);
 
-        alldata = ilPmodelFromJson(
+        allgetiltpdata = ilPmodelFromJson(
             response.body); // Assuming this function is parsing the response
 
-        if (scannedModel.value!.applicantName == alldata!.name &&
-            scannedModel.value!.idNo == alldata!.idNo &&
-            isSameDate(scannedModel.value!.dateOfIssue, alldata!.issueDate) &&
-            isSameDate(scannedModel.value!.validUpto, alldata!.validDate)) {
+        if (scannedModel!.applicantName == allgetiltpdata!.name &&
+            scannedModel!.idNo == allgetiltpdata!.idNo &&
+            isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
+            isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
           log('Valided');
+            _isfake = false;
+            _isvalided = true;
+         update();
         } else {
-          log('FAke ID Card Found');
+         _isfake = true;
+           _isvalided = false;
+         update();
         }
-        log("Name : ${alldata!.name}");
+        log("Name : ${allgetiltpdata!.name}");
       } else {
         print('Failed to load data: ${response.reasonPhrase}');
       }
@@ -71,16 +93,19 @@ class Scancontroller extends GetxController {
       try {
         // Parse the JSON data into QrScannerModel
         final parsedData = qrScannerModelFromJson(barcodeScanRes);
-        scannedModel.value = parsedData; // Update the scanned data
-        log(scannedModel.value!.permitNo);
-        getiilpdata(permitnum: scannedModel.value!.permitNo);
+        scannedModel = parsedData; // Update the scanned data
+        update();
+        log(scannedModel!.permitNo);
+        getiilpdata(permitnum: scannedModel!.permitNo);
+        Get.to(ApplicantProfile());
 //Get location and make post request to server
-        var loc = await getlocation();
+        var loc = await getLocation();
         log(loc.toString());
 // location, permet num, datetime.now
       } catch (e) {
         log(e.toString());
         Get.snackbar(
+          backgroundColor: const Color.fromARGB(0, 246, 113, 51),
           "Invalid Data",
           "The scanned QR code contains invalid data.",
           snackPosition: SnackPosition.BOTTOM,
@@ -89,37 +114,69 @@ class Scancontroller extends GetxController {
     }
   }
 
-  Future<String> getlocation() async {
+  Future<void> checkLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      locationStatus.value = 'Location services are disabled.';
+      return;
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        locationStatus.value = 'Location permissions are denied.';
+        return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      locationStatus.value =
+          'Location permissions are permanently denied, we cannot request permissions.';
+      return;
     }
-    Position position = await Geolocator.getCurrentPosition(
-      locationSettings: AndroidSettings(
-          forceLocationManager: true, accuracy: LocationAccuracy.best),
-    );
 
-    final gpsCoordinates =
-        'Lat: ${(position.latitude.toStringAsFixed(4))}, Lon: ${(position.longitude.toStringAsFixed(4))}';
-
-    update();
-
-    return gpsCoordinates;
+    locationStatus.value = 'Location permissions granted.';
   }
+
+  Future<String> getLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: AndroidSettings(
+            forceLocationManager: true, accuracy: LocationAccuracy.best),
+      );
+
+      final gpsCoordinates =
+          'Lat: ${(position.latitude.toStringAsFixed(4))}, Lon: ${(position.longitude.toStringAsFixed(4))}';
+
+      return gpsCoordinates;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+
+String formatDateWithSuffix(DateTime date) {
+  final day = date.day;
+  final month = DateFormat.MMM().format(date); // Short month name
+  final year = date.year;
+
+  // Add suffix for the day (st, nd, rd, th)
+  String suffix;
+  if (day % 10 == 1 && day != 11) {
+    suffix = 'st';
+  } else if (day % 10 == 2 && day != 12) {
+    suffix = 'nd';
+  } else if (day % 10 == 3 && day != 13) {
+    suffix = 'rd';
+  } else {
+    suffix = 'th';
+  }
+
+  // Combine into the desired format
+  return "$day$suffix $month $year";
+}
 }
