@@ -3,6 +3,7 @@ import 'package:ilpverifyapp/pages/HomePage.dart';
 import 'package:ilpverifyapp/pages/loginpage.dart';
 
 class MainScreen extends StatefulWidget {
+  static const String routename = "/homescreen";
   const MainScreen({super.key});
 
   @override

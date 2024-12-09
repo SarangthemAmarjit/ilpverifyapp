@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/pages/loginpage.dart';
+import 'package:ilpverifyapp/pages/navbar.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,12 +27,29 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // Use a Google Font for the entire app
         textTheme: GoogleFonts.kulimParkTextTheme(),
-
+        appBarTheme: AppBarTheme(
+          toolbarHeight: 80,
+          color: Colors.green,
+          foregroundColor: Colors.white
+        ),
+        elevatedButtonTheme:ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              minimumSize: const Size(
+                                  100, 50), // Minimum size for the button
+                            ),
+        ) ,
         // Optionally customize specific text styles
-        primaryTextTheme: GoogleFonts.robotoTextTheme(),
+        primaryTextTheme: GoogleFonts.montserratTextTheme(),
       ),
       debugShowCheckedModeBanner: false,
       home: const LoginPage(),
+      getPages: [
+        GetPage(name: MainScreen.routename, page: () => const MainScreen(),)
+      ],
     );
   }
 }

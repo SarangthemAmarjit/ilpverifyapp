@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 
 class HomePage extends StatelessWidget {
+static const String routename = "HomePage";
   const HomePage({super.key});
 
   @override
@@ -13,7 +14,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 205, 240, 239),
+        // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
         title: const Text(
           'ILP Card Verification',
           style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
@@ -27,6 +28,15 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+               controller.serviceEnabled?Container(
+                  child:Row(
+                    children: [
+                      const Text("Cannot Access Location"),
+                      ElevatedButton(onPressed: (){},child: const Text("Request"),)
+                    ],
+                  ), 
+
+                ):const SizedBox(),
                 const SizedBox(
                   height: 100,
                 ),

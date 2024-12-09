@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
 
+import '../config/apis.dart';
+
 class Scancontroller extends GetxController {
   IlPmodel? allgetiltpdata;
   final permitController = TextEditingController();
@@ -24,13 +26,14 @@ class Scancontroller extends GetxController {
   bool get isfake => _isfake;
   // Scanned data
   QrScannerModel? scannedModel;
-
+ bool serviceEnabled = false;
   RxString locationStatus = ''.obs; // Observable to track location status
-
   @override
   void onInit() {
     super.onInit();
     checkLocationPermission(); // Call permission check when the controller initializes
+
+
   }
 
   bool isSameDate(DateTime? date1, DateTime? date2) {
@@ -40,12 +43,13 @@ class Scancontroller extends GetxController {
         date1.day == date2.day;
   }
 
+
   void verifyiilpdata() async {
     _isverifybuttonpress = true;
     update();
     try {
       final response = await http.get(Uri.parse(
-          'https://manipurilponline.mn.gov.in/api/permit/${permitController.text}'));
+          '$permitapi${permitController.text}'));
 
       if (response.statusCode == 200) {
         print(response.body);
@@ -138,6 +142,7 @@ class Scancontroller extends GetxController {
 
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        
         '#ff6666', // Scanner overlay color
         'Cancel', // Cancel button text
         true, // Show flash icon
@@ -155,14 +160,17 @@ class Scancontroller extends GetxController {
       // Ensure it's not canceled
       try {
         // Parse the JSON data into QrScannerModel
+        
         final parsedData = qrScannerModelFromJson(barcodeScanRes);
+        
         scannedModel = parsedData; // Update the scanned data
+        print(scannedModel?.toJson().toString()??"");
         update();
         log(scannedModel!.permitNo);
         var ispermitnumvalided =
             await getiilpdata(permitnum: scannedModel!.permitNo);
         if (ispermitnumvalided) {
-          Get.to(const ApplicantProfile());
+          Get.to(()=>const ApplicantProfile());
         } else {
           Get.snackbar("Error", "Invalid Permit Number.",
               backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
@@ -170,11 +178,11 @@ class Scancontroller extends GetxController {
         }
 
 //Get location and make post request to server
-        var loc = await getLocation();
-        log(loc.toString());
+        // String? loc = await getLocation();
+        // log(loc.toString());
 // location, permet num, datetime.now
       } catch (e) {
-        log(e.toString());
+        log( "log in scanner: ${e.toString()}");
         Get.snackbar(
           backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white
           ,
@@ -187,7 +195,7 @@ class Scancontroller extends GetxController {
   }
 
   Future<void> checkLocationPermission() async {
-    bool serviceEnabled;
+   
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -212,9 +220,10 @@ class Scancontroller extends GetxController {
     }
 
     locationStatus.value = 'Location permissions granted.';
+    update();
   }
 
-  Future<String> getLocation() async {
+  Future<String?> getLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
         locationSettings: AndroidSettings(
@@ -226,7 +235,9 @@ class Scancontroller extends GetxController {
 
       return gpsCoordinates;
     } catch (e) {
-      return Future.error(e.toString());
+      // return Future.error(e.toString()
+      // );
+      return null;
     }
   }
 
