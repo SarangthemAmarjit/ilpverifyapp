@@ -20,10 +20,8 @@ class LoginController extends GetxController {
   bool _islogin = false;
   bool get islogin => _islogin;
 
-  // Observing the connectivity status
-
-
-
+  bool _isauthchecking = false;
+  bool get isauthchecking => _isauthchecking;
 
   @override
   void onInit() {
@@ -84,30 +82,26 @@ class LoginController extends GetxController {
     }
   }
   checktoken() async {
-    isloginloading = true;
+    _isauthchecking = true;
     update();
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    if (pref.containsKey('token') && pref.containsKey('tokenpass')) {
-          String? username = await pref.getString('token');
-          String? password = await pref.getString('tokenpass');
-          Map<String,int> res =  await authenticationRepo.loginUser(username??"", password??"");
 
-      //set values to shared preferences is login is successfull
-      if(res.entries.first.value==1){
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.containsKey('token')) {
+      Future.delayed(const Duration(seconds: 2)).whenComplete(() {
         _islogin = true;
-          authenticate();
+
+        _isauthchecking = false;
         update();
-       
-      }else{
-        _islogin = false;
-       
-        update();
-      }
-      log('trueeeee');
+        log('trueeeee');
+      });
     } else {
-      _islogin = false;
-      update();
-      log('falsesssss');
+      Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+        _islogin = false;
+
+        _isauthchecking = false;
+        update();
+        log('falsesssss');
+      });
     }
        isloginloading = false;
     update();
