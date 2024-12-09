@@ -3,18 +3,31 @@ import 'package:get/get.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:lottie/lottie.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+static const String routename = "HomePage";
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+ 
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     // Initialize the HomeController
-    Scancontroller controller = Get.put(Scancontroller());
+    Scancontroller controller = Get.find<Scancontroller>();
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 205, 240, 239),
+        // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
         title: const Text(
           'ILP Card Verification',
           style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),

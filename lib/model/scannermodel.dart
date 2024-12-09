@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final qrScannerModel = qrScannerModelFromJson(jsonString);
-
 import 'package:meta/meta.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
