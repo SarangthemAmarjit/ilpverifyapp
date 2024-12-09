@@ -1,21 +1,29 @@
 import 'dart:developer';
 
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ilpverifyapp/model/repositories/authrepoimpl.dart';
 import 'package:ilpverifyapp/pages/loginpage.dart';
 import 'package:ilpverifyapp/pages/navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
+  final AuthRepoImpl authenticationRepo = AuthRepoImpl();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   var isStayed = false.obs;
    var isObscured = true.obs;
   final String correctUsername = "admin";
   final String correctPassword = "12345";
-
+  bool isloginloading = false;
   bool _islogin = false;
   bool get islogin => _islogin;
+
+  // Observing the connectivity status
+
+
+
 
   @override
   void onInit() {
@@ -27,6 +35,9 @@ class LoginController extends GetxController {
   void setpasswordvisibility() {
     isObscured.value = !isObscured.value;
   }
+
+
+
 
   void logout() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -42,27 +53,64 @@ class LoginController extends GetxController {
     //get login api 
     if (username.isEmpty || password.isEmpty) {
       _showDialog("Error", "Username or Password cannot be empty.");
-    } else if (username != correctUsername || password != correctPassword) {
-      _showDialog("Login Failed", "Incorrect Username or Password.");
-    } else {
-      Get.off(() => const MainScreen());
-      pref.setString('token', username);
-      _showDialog("Login Success", "Welcome, $username!");
+    }
+    //  else if (username != correctUsername || password != correctPassword) {
+    //   _showDialog("Login Failed", "Incorrect Username or Password.");
+    // } 
+    else {
+      
+      //res = {"String":"int"} {1 - sucess,-1 - error,3 - catch exception}
+      Map<String,int> res =  await authenticationRepo.loginUser(username, password);
+
+      //set values to shared preferences is login is successfull
+      if(res.entries.first.value==1){
+        _islogin = true;
+         pref.setString('token', username);
+        pref.setString('tokenpass', password);
+          authenticate();
+        update();
+          _showDialog(res.entries.first.key, "Welcome, $username!");
+      }else{
+          _showDialog("Log In Error!", res.entries.first.key);
+      }
+    
+    
       // Navigate to the next screen
     }
   }
-
+  void authenticate(){
+    if(_islogin){
+           Get.off(() => const MainScreen());
+    }
+  }
   checktoken() async {
+    isloginloading = true;
+    update();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    if (pref.containsKey('token')) {
-      _islogin = true;
-      update();
+    if (pref.containsKey('token') && pref.containsKey('tokenpass')) {
+          String? username = await pref.getString('token');
+          String? password = await pref.getString('tokenpass');
+          Map<String,int> res =  await authenticationRepo.loginUser(username??"", password??"");
+
+      //set values to shared preferences is login is successfull
+      if(res.entries.first.value==1){
+        _islogin = true;
+          authenticate();
+        update();
+       
+      }else{
+        _islogin = false;
+       
+        update();
+      }
       log('trueeeee');
     } else {
       _islogin = false;
       update();
       log('falsesssss');
     }
+       isloginloading = false;
+    update();
   }
 
   void _showDialog(String title, String message) {

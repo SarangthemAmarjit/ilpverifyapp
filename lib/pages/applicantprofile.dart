@@ -9,7 +9,7 @@ class ApplicantProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Scancontroller controller = Get.put(Scancontroller());
+    Scancontroller controller = Get.find<Scancontroller>();
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 232, 240, 228),

@@ -13,7 +13,7 @@ class AuthhandlerPage extends StatelessWidget {
     LoginController scancontroller = Get.find<LoginController>();
 
     return GetBuilder<Scancontroller>(builder: (_) {
-      return scancontroller.islogin ? const MainScreen() : const LoginPage();
+      return scancontroller.isloginloading?const Scaffold(body: Center(child:CircularProgressIndicator(color: Colors.green,)),): scancontroller.islogin ? const MainScreen() : const LoginPage();
     });
   }
 }
