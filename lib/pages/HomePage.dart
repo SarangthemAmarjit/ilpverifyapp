@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -22,8 +23,11 @@ class HomePage extends StatelessWidget {
       ),
       body: GetBuilder<Scancontroller>(builder: (_) {
         return controller.iswaitingfornextpage
-            ? const Center(
-                child: CircularProgressIndicator(),
+            ? Center(
+                child: Lottie.asset(
+                  'assets/images/loading.json',
+                  height: 120,
+                ),
               )
             : SingleChildScrollView(
                 child: Padding(
@@ -75,12 +79,11 @@ class HomePage extends StatelessWidget {
                             fontSize: 20, fontStyle: FontStyle.italic),
                       ),
                       const SizedBox(height: 30.0),
-                      Row(
+                      Column(
                         children: [
-                          Expanded(
-                            flex: 2, // Adjust flex values as needed
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: TextFormField(
-                              // scrollPadding: const EdgeInsets.only(bottom: 100),
                               controller: controller.permitController,
                               decoration: InputDecoration(
                                 hintText: 'Enter Permit Number',
@@ -95,12 +98,13 @@ class HomePage extends StatelessWidget {
                                 ),
                               ),
                               style: const TextStyle(
-                                  color: Color.fromARGB(255, 0, 10, 38)),
+                                color: Color.fromARGB(255, 0, 10, 38),
+                              ),
                             ),
                           ),
                           const SizedBox(
-                              width:
-                                  8), // Add spacing between the TextField and Button
+                              height:
+                                  25), // Add spacing between the TextField and Button
                           controller.isverifybuttonpress
                               ? const Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -108,7 +112,17 @@ class HomePage extends StatelessWidget {
                                 )
                               : ElevatedButton(
                                   onPressed: () {
-                                    controller.verifyiilpdata();
+                                    if (controller
+                                        .permitController.text.isEmpty) {
+                                      Get.snackbar("Error",
+                                          "Permit number cannot be empty",
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 233, 92, 92),
+                                          colorText: Colors.white,
+                                          snackPosition: SnackPosition.BOTTOM);
+                                    } else {
+                                      controller.verifyiilpdata();
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green,
