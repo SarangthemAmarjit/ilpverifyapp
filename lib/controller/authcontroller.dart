@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/pages/navbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   var isStayed = false.obs;
- var isObscured = true.obs;
+  var isObscured = true.obs;
   final String correctUsername = "admin";
   final String correctPassword = "12345";
 
-
-
-void setpasswordvisibility(){
+  void setpasswordvisibility() {
     isObscured.value = !isObscured.value;
-}
+  }
 
-
-  void validateAndLogin() {
+  void validateAndLogin() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     String username = usernameController.text;
     String password = passwordController.text;
 
@@ -27,6 +26,7 @@ void setpasswordvisibility(){
       _showDialog("Login Failed", "Incorrect Username or Password.");
     } else {
       Get.off(() => const MainScreen());
+      pref.setString('token', username);
       _showDialog("Login Success", "Welcome, $username!");
       // Navigate to the next screen
     }
