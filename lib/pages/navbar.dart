@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/pages/HomePage.dart';
-import 'package:ilpverifyapp/pages/loginpage.dart';
 
 class MainScreen extends StatefulWidget {
   static const String routename = "/homescreen";
@@ -30,33 +31,31 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _showLogoutDialog() {
+    LoginController logcontroller = Get.find<LoginController>();
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Logout'),
-          content: const Text('Are you sure you want to log out?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          LoginPage()), // Replace with your LoginPage
-                );
-              },
-              child: const Text('Log Out'),
-            ),
-          ],
-        );
+        return StatefulBuilder(builder: (context, s) {
+          return AlertDialog(
+            title: const Text('Confirm Logout'),
+            content: const Text('Are you sure you want to log out?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  logcontroller.logout();
+                },
+                child: const Text('Log Out'),
+              ),
+            ],
+          );
+        });
       },
     );
   }

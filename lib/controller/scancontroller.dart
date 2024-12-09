@@ -1,21 +1,24 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:ilpverifyapp/pages/applicantprofile.dart';
-import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
+import 'package:ilpverifyapp/pages/applicantprofile.dart';
+import 'package:intl/intl.dart';
 
 import '../config/apis.dart';
 
 class Scancontroller extends GetxController {
   IlPmodel? allgetiltpdata;
   final permitController = TextEditingController();
+
+  bool _iswaitingfornextpage = false;
+  bool get iswaitingfornextpage => _iswaitingfornextpage;
 
   bool _isvalided = false;
   bool get isvalided => _isvalided;
@@ -24,6 +27,7 @@ class Scancontroller extends GetxController {
   bool get isverifybuttonpress => _isverifybuttonpress;
   bool _isfake = false;
   bool get isfake => _isfake;
+
   // Scanned data
   QrScannerModel? scannedModel;
  bool serviceEnabled = false;
@@ -31,6 +35,7 @@ class Scancontroller extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
     checkLocationPermission(); // Call permission check when the controller initializes
 
 
@@ -80,7 +85,8 @@ class Scancontroller extends GetxController {
 
         print('Failed to load data: ${response.reasonPhrase}');
         Get.snackbar("Error", "Invalid Permit Number.",
-            backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
+            backgroundColor: const Color.fromARGB(255, 233, 92, 92),
+            colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
       }
     } catch (e) {
@@ -123,14 +129,16 @@ class Scancontroller extends GetxController {
       } else {
         print('Failed to load data: ${response.reasonPhrase}');
         Get.snackbar("Error", "Invalid Permit Number.",
-            backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
+            backgroundColor: const Color.fromARGB(255, 233, 92, 92),
+            colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
         return false;
       }
     } catch (e) {
       print('Error occurred: $e');
       Get.snackbar("Error", "$e.",
-          backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 233, 92, 92),
+          colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
       return false;
     }
@@ -151,12 +159,15 @@ class Scancontroller extends GetxController {
     } on PlatformException {
       barcodeScanRes = 'Failed to start QR scanner.';
       Get.snackbar("Error", "Failed to start QR scanner.",
-          backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 233, 92, 92),
+          colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
       return;
     }
 
     if (barcodeScanRes.isNotEmpty && barcodeScanRes != '-1') {
+      _iswaitingfornextpage = true;
+      update();
       // Ensure it's not canceled
       try {
         // Parse the JSON data into QrScannerModel
@@ -170,10 +181,15 @@ class Scancontroller extends GetxController {
         var ispermitnumvalided =
             await getiilpdata(permitnum: scannedModel!.permitNo);
         if (ispermitnumvalided) {
-          Get.to(()=>const ApplicantProfile());
+          Get.to(const ApplicantProfile());
+          _iswaitingfornextpage = false;
+          update();
         } else {
+          _iswaitingfornextpage = false;
+          update();
           Get.snackbar("Error", "Invalid Permit Number.",
-              backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
+              backgroundColor: const Color.fromARGB(255, 233, 92, 92),
+              colorText: Colors.white,
               snackPosition: SnackPosition.BOTTOM);
         }
 
@@ -182,10 +198,12 @@ class Scancontroller extends GetxController {
         // log(loc.toString());
 // location, permet num, datetime.now
       } catch (e) {
-        log( "log in scanner: ${e.toString()}");
+        _iswaitingfornextpage = false;
+        update();
+        log(e.toString());
         Get.snackbar(
-          backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white
-          ,
+          backgroundColor: const Color.fromARGB(255, 233, 92, 92),
+          colorText: Colors.white,
           "Invalid Data",
           "The scanned QR code contains invalid data.",
           snackPosition: SnackPosition.BOTTOM,

@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
-import 'package:ilpverifyapp/pages/loginpage.dart';
+import 'package:ilpverifyapp/pages/authhandler.dart';
 import 'package:ilpverifyapp/pages/navbar.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
 
- 
-
   // Initialize LocationController
+  Get.put(LoginController()); // Registers the controller as a singleton
   Get.put(Scancontroller()); // Registers the controller as a singleton
   runApp(const MyApp());
 }
@@ -46,10 +46,7 @@ class MyApp extends StatelessWidget {
         primaryTextTheme: GoogleFonts.montserratTextTheme(),
       ),
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
-      getPages: [
-        GetPage(name: MainScreen.routename, page: () => const MainScreen(),)
-      ],
+      home: const AuthhandlerPage(),
     );
   }
 }
