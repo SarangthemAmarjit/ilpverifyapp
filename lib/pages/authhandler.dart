@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
-import 'package:ilpverifyapp/controller/scancontroller.dart';
+import 'package:ilpverifyapp/pages/loadingpage.dart';
 import 'package:ilpverifyapp/pages/loginpage.dart';
 import 'package:ilpverifyapp/pages/navbar.dart';
 
@@ -10,10 +12,14 @@ class AuthhandlerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LoginController scancontroller = Get.find<LoginController>();
-
-    return GetBuilder<Scancontroller>(builder: (_) {
-      return scancontroller.islogin ? const MainScreen() : const LoginPage();
+    LoginController authcontroller = Get.find<LoginController>();
+    log("islogin : ${authcontroller.islogin}");
+    return GetBuilder<LoginController>(builder: (_) {
+      return authcontroller.isauthchecking
+          ? const LoadingPage()
+          : authcontroller.islogin
+              ? const MainScreen()
+              : const LoginPage();
     });
   }
 }

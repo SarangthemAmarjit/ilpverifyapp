@@ -17,6 +17,9 @@ class LoginController extends GetxController {
   bool _islogin = false;
   bool get islogin => _islogin;
 
+  bool _isauthchecking = false;
+  bool get isauthchecking => _isauthchecking;
+
   @override
   void onInit() {
     super.onInit();
@@ -53,15 +56,26 @@ class LoginController extends GetxController {
   }
 
   checktoken() async {
+    _isauthchecking = true;
+    update();
+
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (pref.containsKey('token')) {
-      _islogin = true;
-      update();
-      log('trueeeee');
+      Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+        _islogin = true;
+
+        _isauthchecking = false;
+        update();
+        log('trueeeee');
+      });
     } else {
-      _islogin = false;
-      update();
-      log('falsesssss');
+      Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+        _islogin = false;
+
+        _isauthchecking = false;
+        update();
+        log('falsesssss');
+      });
     }
   }
 
