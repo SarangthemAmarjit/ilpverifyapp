@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ilpverifyapp/pages/loginpage.dart';
 import 'package:ilpverifyapp/pages/navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,8 +14,25 @@ class LoginController extends GetxController {
   final String correctUsername = "admin";
   final String correctPassword = "12345";
 
+  bool _islogin = false;
+  bool get islogin => _islogin;
+
+  @override
+  void onInit() {
+    super.onInit();
+    checktoken();
+    // Call permission check when the controller initializes
+  }
+
   void setpasswordvisibility() {
     isObscured.value = !isObscured.value;
+  }
+
+  void logout() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.clear();
+    checktoken();
+    Get.offAll(const LoginPage());
   }
 
   void validateAndLogin() async {
@@ -29,6 +49,19 @@ class LoginController extends GetxController {
       pref.setString('token', username);
       _showDialog("Login Success", "Welcome, $username!");
       // Navigate to the next screen
+    }
+  }
+
+  checktoken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.containsKey('token')) {
+      _islogin = true;
+      update();
+      log('trueeeee');
+    } else {
+      _islogin = false;
+      update();
+      log('falsesssss');
     }
   }
 

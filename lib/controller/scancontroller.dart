@@ -10,7 +10,6 @@ import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
 import 'package:ilpverifyapp/pages/applicantprofile.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Scancontroller extends GetxController {
   IlPmodel? allgetiltpdata;
@@ -27,8 +26,6 @@ class Scancontroller extends GetxController {
   bool _isfake = false;
   bool get isfake => _isfake;
 
-  bool _islogin = false;
-  bool get islogin => _islogin;
   // Scanned data
   QrScannerModel? scannedModel;
 
@@ -37,19 +34,8 @@ class Scancontroller extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    checktoken();
-    checkLocationPermission(); // Call permission check when the controller initializes
-  }
 
-  checktoken() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    if (pref.containsKey('token')) {
-      _islogin = true;
-      update();
-    } else {
-      _islogin = false;
-      update();
-    }
+    checkLocationPermission(); // Call permission check when the controller initializes
   }
 
   bool isSameDate(DateTime? date1, DateTime? date2) {
