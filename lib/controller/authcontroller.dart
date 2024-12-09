@@ -6,9 +6,16 @@ class LoginController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   var isStayed = false.obs;
-
+ var isObscured = true.obs;
   final String correctUsername = "admin";
   final String correctPassword = "12345";
+
+
+
+void setpasswordvisibility(){
+    isObscured.value = !isObscured.value;
+}
+
 
   void validateAndLogin() {
     String username = usernameController.text;

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ilpverifyapp/pages/applicantprofile.dart';
 import 'package:intl/intl.dart';
@@ -12,12 +13,14 @@ import 'package:ilpverifyapp/model/scannermodel.dart';
 
 class Scancontroller extends GetxController {
   IlPmodel? allgetiltpdata;
-
+  final permitController = TextEditingController();
 
   bool _isvalided = false;
   bool get isvalided => _isvalided;
 
-    bool _isfake = false;
+  bool _isverifybuttonpress = false;
+  bool get isverifybuttonpress => _isverifybuttonpress;
+  bool _isfake = false;
   bool get isfake => _isfake;
   // Scanned data
   QrScannerModel? scannedModel;
@@ -37,7 +40,57 @@ class Scancontroller extends GetxController {
         date1.day == date2.day;
   }
 
-  void getiilpdata({required String permitnum}) async {
+  void verifyiilpdata() async {
+    _isverifybuttonpress = true;
+    update();
+    try {
+      final response = await http.get(Uri.parse(
+          'https://manipurilponline.mn.gov.in/api/permit/${permitController.text}'));
+
+      if (response.statusCode == 200) {
+        print(response.body);
+
+        allgetiltpdata = ilPmodelFromJson(
+            response.body); // Assuming this function is parsing the response
+
+        if (scannedModel!.applicantName == allgetiltpdata!.name &&
+            scannedModel!.idNo == allgetiltpdata!.idNo &&
+            isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
+            isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
+          log('Valided');
+          _isfake = false;
+          _isvalided = true;
+          update();
+        } else {
+          _isfake = true;
+          _isvalided = false;
+          update();
+        }
+        log("Name : ${allgetiltpdata!.name}");
+        _isverifybuttonpress = false;
+        update();
+        Get.to(const ApplicantProfile());
+      } else {
+        _isverifybuttonpress = false;
+        update();
+
+        print('Failed to load data: ${response.reasonPhrase}');
+        Get.snackbar("Error", "Invalid Permit Number.",
+            backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM);
+      }
+    } catch (e) {
+      _isverifybuttonpress = false;
+      update();
+      print('Error occurred: $e');
+      Get.snackbar("Error", "Server Problem.",
+          backgroundColor: const Color.fromARGB(255, 233, 92, 92),
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  Future<bool> getiilpdata({required String permitnum}) async {
     try {
       final response = await http.get(Uri.parse(
           'https://manipurilponline.mn.gov.in/api/permit/$permitnum'));
@@ -53,20 +106,29 @@ class Scancontroller extends GetxController {
             isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
             isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
           log('Valided');
-            _isfake = false;
-            _isvalided = true;
-         update();
+          _isfake = false;
+          _isvalided = true;
+          update();
         } else {
-         _isfake = true;
-           _isvalided = false;
-         update();
+          _isfake = true;
+          _isvalided = false;
+          update();
         }
         log("Name : ${allgetiltpdata!.name}");
+        return true;
       } else {
         print('Failed to load data: ${response.reasonPhrase}');
+        Get.snackbar("Error", "Invalid Permit Number.",
+            backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM);
+        return false;
       }
     } catch (e) {
       print('Error occurred: $e');
+      Get.snackbar("Error", "$e.",
+          backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+      return false;
     }
   }
 
@@ -84,6 +146,7 @@ class Scancontroller extends GetxController {
     } on PlatformException {
       barcodeScanRes = 'Failed to start QR scanner.';
       Get.snackbar("Error", "Failed to start QR scanner.",
+          backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
       return;
     }
@@ -96,8 +159,16 @@ class Scancontroller extends GetxController {
         scannedModel = parsedData; // Update the scanned data
         update();
         log(scannedModel!.permitNo);
-        getiilpdata(permitnum: scannedModel!.permitNo);
-        Get.to(ApplicantProfile());
+        var ispermitnumvalided =
+            await getiilpdata(permitnum: scannedModel!.permitNo);
+        if (ispermitnumvalided) {
+          Get.to(const ApplicantProfile());
+        } else {
+          Get.snackbar("Error", "Invalid Permit Number.",
+              backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white,
+              snackPosition: SnackPosition.BOTTOM);
+        }
+
 //Get location and make post request to server
         var loc = await getLocation();
         log(loc.toString());
@@ -105,7 +176,8 @@ class Scancontroller extends GetxController {
       } catch (e) {
         log(e.toString());
         Get.snackbar(
-          backgroundColor: const Color.fromARGB(0, 246, 113, 51),
+          backgroundColor: const Color.fromARGB(255, 233, 92, 92),colorText: Colors.white
+          ,
           "Invalid Data",
           "The scanned QR code contains invalid data.",
           snackPosition: SnackPosition.BOTTOM,
@@ -158,25 +230,24 @@ class Scancontroller extends GetxController {
     }
   }
 
+  String formatDateWithSuffix(DateTime date) {
+    final day = date.day;
+    final month = DateFormat.MMM().format(date); // Short month name
+    final year = date.year;
 
-String formatDateWithSuffix(DateTime date) {
-  final day = date.day;
-  final month = DateFormat.MMM().format(date); // Short month name
-  final year = date.year;
+    // Add suffix for the day (st, nd, rd, th)
+    String suffix;
+    if (day % 10 == 1 && day != 11) {
+      suffix = 'st';
+    } else if (day % 10 == 2 && day != 12) {
+      suffix = 'nd';
+    } else if (day % 10 == 3 && day != 13) {
+      suffix = 'rd';
+    } else {
+      suffix = 'th';
+    }
 
-  // Add suffix for the day (st, nd, rd, th)
-  String suffix;
-  if (day % 10 == 1 && day != 11) {
-    suffix = 'st';
-  } else if (day % 10 == 2 && day != 12) {
-    suffix = 'nd';
-  } else if (day % 10 == 3 && day != 13) {
-    suffix = 'rd';
-  } else {
-    suffix = 'th';
+    // Combine into the desired format
+    return "$day$suffix $month $year";
   }
-
-  // Combine into the desired format
-  return "$day$suffix $month $year";
-}
 }

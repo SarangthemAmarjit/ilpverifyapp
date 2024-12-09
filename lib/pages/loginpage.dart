@@ -124,28 +124,39 @@ class LoginPage extends StatelessWidget {
                             style: const TextStyle(color: Colors.white),
                           ),
                           const SizedBox(height: 15),
-                          TextField(
-                            scrollPadding: const EdgeInsets.only(bottom: 200),
-                            controller: controller.passwordController,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              hintText: 'Password',
-                              hintStyle: const TextStyle(
-                                color: Color.fromARGB(179, 128, 127, 127),
-                              ),
-                              filled: true,
-                              fillColor: const Color(0xFF3A3A3A),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              prefixIcon: const Icon(
-                                FontAwesomeIcons.lock,
-                                color: Color.fromARGB(255, 222, 228, 211),
-                                size: 20,
-                              ),
-                            ),
-                            style: const TextStyle(color: Colors.white),
-                          ),
+            Obx(()=>
+          TextField(
+                    scrollPadding: const EdgeInsets.only(bottom: 200),
+                    controller: controller.passwordController,
+                    obscureText: controller.isObscured.value,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      hintStyle: const TextStyle(
+                        color: Color.fromARGB(179, 128, 127, 127),
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xFF3A3A3A),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      prefixIcon: const Icon(
+                        FontAwesomeIcons.lock,
+                        color: Color.fromARGB(255, 222, 228, 211),
+                        size: 20,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+              controller.isObscured.value ? Icons.visibility_off : Icons.visibility,
+              color: const Color.fromARGB(255, 222, 228, 211),
+                        ),
+                        onPressed: () {
+           controller.setpasswordvisibility();
+                        },
+                      ),
+                    ),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+            ),
                           const SizedBox(height: 15),
                           Obx(() => Row(
                                 children: [
