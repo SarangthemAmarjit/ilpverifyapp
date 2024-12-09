@@ -60,7 +60,7 @@ class LoginController extends GetxController {
       if (res.entries.first.value == 1) {
         _islogin = true;
         pref.setString('token', username);
-        pref.setString('tokenpass', password);
+    
         authenticate();
         update();
         _showDialog(res.entries.first.key, "Welcome, $username!");

@@ -65,6 +65,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+      
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         elevation: 10,
         selectedFontSize: 16,
