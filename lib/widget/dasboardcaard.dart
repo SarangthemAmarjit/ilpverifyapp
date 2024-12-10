@@ -51,7 +51,7 @@ class DashboardCard extends StatelessWidget {
                       Icon(
                         FontAwesomeIcons.checkToSlot,
                         color: Color.fromARGB(255, 185, 244, 187),
-                        size: 40,
+                        size: 45,
                       ),
                       SizedBox(width: 12),
                       Column(
@@ -82,7 +82,7 @@ class DashboardCard extends StatelessWidget {
                       Icon(
                         FontAwesomeIcons.triangleExclamation,
                         color: Color.fromARGB(255, 219, 190, 188),
-                        size: 40,
+                        size: 45,
                       ),
                       SizedBox(width: 12),
                       Column(
