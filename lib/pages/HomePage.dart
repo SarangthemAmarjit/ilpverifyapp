@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:lottie/lottie.dart';
 
+
 class HomePage extends StatefulWidget {
 static const String routename = "HomePage";
   const HomePage({super.key});
@@ -19,6 +20,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+
+    // TODO: implement dispose
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     // Initialize the HomeController
@@ -134,6 +141,7 @@ class _HomePageState extends State<HomePage> {
                                           colorText: Colors.white,
                                           snackPosition: SnackPosition.BOTTOM);
                                     } else {
+                                     
                                       controller.verifyiilpdata();
                                     }
                                   },

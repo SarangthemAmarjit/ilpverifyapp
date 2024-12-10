@@ -10,6 +10,7 @@ import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/repositories/sendpermitrepository.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
 import 'package:ilpverifyapp/pages/applicantprofile.dart';
+import 'package:ilpverifyapp/pages/applicantprofiledetails.dart';
 import 'package:intl/intl.dart';
 
 import '../config/apis.dart';
@@ -95,6 +96,7 @@ Future<void> initConnectivity() async {
 
 
   void verifyiilpdata() async {
+     String? loc;
     _isverifybuttonpress = true;
     update();
     try {
@@ -107,13 +109,19 @@ Future<void> initConnectivity() async {
         allgetiltpdata = ilPmodelFromJson(
             response.body); // Assuming this function is parsing the response
       //post data to my permit list
-        String? loc = await getLocation();
+      if(serviceEnabled){
+
+       loc = await getLocation();
+      }else{
+
+
+      }
         Permit x = Permit(id: "dupliPermit", permitId: allgetiltpdata?.permitNo??"NA", location: loc??"NA");
       permitApiRepo.createPermit(x);
       _mypermits.add(x);
       update();
 
-        if (scannedModel!.applicantName == allgetiltpdata!.name &&
+        if (scannedModel!=null && scannedModel!.applicantName == allgetiltpdata!.name &&
             scannedModel!.idNo == allgetiltpdata!.idNo &&
             isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
             isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
@@ -129,7 +137,7 @@ Future<void> initConnectivity() async {
         log("Name : ${allgetiltpdata!.name}");
         _isverifybuttonpress = false;
         update();
-        Get.to(const ApplicantProfile());
+        Get.to(const ApplicantProfileDetails());
       } else {
         _isverifybuttonpress = false;
         update();
@@ -196,6 +204,9 @@ Future<void> initConnectivity() async {
     }
   }
 
+  void deleteScanmodel(){
+    scannedModel = null;
+  }
   // Method to start QR scan
   Future<void> startQRScan() async {
     String barcodeScanRes;
@@ -233,7 +244,7 @@ Future<void> initConnectivity() async {
         var ispermitnumvalided =
             await getiilpdata(permitnum: scannedModel!.permitNo);
         if (ispermitnumvalided) {
-          Get.to(const ApplicantProfile());
+          Get.to(const ApplicantProfileDetails());
           _iswaitingfornextpage = false;
           update();
         } else {
