@@ -19,14 +19,13 @@ class ApplicantProfile extends StatelessWidget {
       body: GetBuilder<Scancontroller>(builder: (_) {
         return Container(
           height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: const AssetImage('assets/images/bg4.png'),
+              image: const AssetImage('assets/images/bghome2.png'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                const Color.fromARGB(255, 137, 229, 141).withOpacity(0.1),
-                BlendMode.darken,
+                const Color.fromARGB(255, 232, 231, 231).withOpacity(0.7),
+                BlendMode.lighten,
               ),
             ),
           ),
@@ -134,8 +133,7 @@ class ApplicantProfile extends StatelessWidget {
                                 child: Container(
                                   height: 2,
                                   width: MediaQuery.of(context).size.width,
-                                  color:
-                                      const Color.fromARGB(255, 244, 171, 196),
+                                  color: const Color.fromARGB(255, 47, 167, 6),
                                 ),
                               ),
                               const SizedBox(
