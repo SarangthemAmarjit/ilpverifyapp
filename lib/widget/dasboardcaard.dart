@@ -49,20 +49,11 @@ class DashboardCard extends StatelessWidget {
                   // Validated Section
                   Row(
                     children: [
-                      Container(
-                        height: 43,
-                        width: 43,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                                color:
-                                    const Color.fromARGB(136, 188, 186, 186))),
-                        child: Opacity(
-                          opacity: 0.5,
-                          child: Image.asset(
-                            'assets/images/valid2.png',
-                            height: 20,
-                          ),
+                      Opacity(
+                        opacity: 0.5,
+                        child: Image.asset(
+                          'assets/images/valid2.png',
+                          height: 45,
                         ),
                       ),
                       // Icon(
@@ -101,29 +92,13 @@ class DashboardCard extends StatelessWidget {
                       //   color: Color.fromARGB(255, 219, 190, 188),
                       //   size: 45,
                       // ),
-                      Container(
-                        height: 43,
-                        width: 43,
-                        decoration: BoxDecoration(
-                          // color: const Color.fromARGB(255, 212, 192, 191)
-                          //     .withOpacity(0.5),
-                          border: Border.all(
-                              color: const Color.fromARGB(136, 188, 186, 186)),
-                          borderRadius: BorderRadius.circular(8),
+                      Opacity(
+                        opacity:
+                            0.5, // Value from 0.0 (completely transparent) to 1.0 (fully opaque)
+                        child: Image.asset(
+                          'assets/images/fakeok.png',
+                          height: 45,
                         ),
-                        child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(8),
-                                topRight: Radius.circular(8)),
-                            child: Opacity(
-                              opacity:
-                                  0.5, // Value from 0.0 (completely transparent) to 1.0 (fully opaque)
-                              child: Image.asset(
-                                'assets/images/fakeok2.png',
-                                height: 25,
-                              ),
-                            )),
                       ),
                       const SizedBox(width: 12),
                       const Column(
