@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
+import 'package:ilpverifyapp/widget/dasboardcaard.dart';
 import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
@@ -59,9 +60,19 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 50,
-                        ),
+                        const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Text(
+                                'Hi, Admin Welcome Back',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            )),
+                        const DashboardCard(),
                         // Title and Instructions
                         ShaderMask(
                           shaderCallback: (bounds) => const LinearGradient(
@@ -69,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                               Color.fromARGB(255, 143, 23, 23),
                               // Color.fromARGB(255, 23, 110, 8),
                               // Color.fromARGB(255, 13, 102, 179),
-                           Color.fromARGB(255, 29, 143, 23),
+                              Color.fromARGB(255, 29, 143, 23),
                             ], // Replace with your gradient colors
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -85,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 8.0),
+
                         // Text(
                         //   'Tap the button below to scan the QR code on the card and verify its authenticity.',
                         //   textAlign: TextAlign.center,
@@ -125,13 +136,13 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.grey[600],
                               fontStyle: FontStyle.italic),
                         ),
-                        const SizedBox(height: 30.0),
+                        const SizedBox(height: 20.0),
                         const Text(
                           'OR',
                           style: TextStyle(
                               fontSize: 20, fontStyle: FontStyle.italic),
                         ),
-                        const SizedBox(height: 30.0),
+                        const SizedBox(height: 20.0),
                         Column(
                           children: [
                             Padding(
@@ -140,10 +151,10 @@ class _HomePageState extends State<HomePage> {
                               child: TextFormField(
                                 controller: controller.permitController,
                                 decoration: InputDecoration(
-                                  hintText: 'Enter Permit Number',
-                                  hintStyle: const TextStyle(
+                                  labelStyle: const TextStyle(
                                     color: Color.fromARGB(179, 128, 127, 127),
                                   ),
+                                  labelText: 'Enter Permit Number',
                                   filled: true,
                                   fillColor:
                                       const Color.fromARGB(255, 239, 241, 234),
@@ -190,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                                           50), // Minimum size for the button
                                     ),
                                     child: const Text(
-                                      'Verify',
+                                      'Verify Now',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,

@@ -14,27 +14,38 @@ class LoginPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: const AssetImage('assets/images/bg4.png'),
+              image: const AssetImage('assets/images/bghome2.png'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3),
-                BlendMode.darken,
+                Colors.white.withOpacity(0.2),
+                BlendMode.lighten,
               ),
             ),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Welcome to Manipur',
-                style: GoogleFonts.greatVibes(
-                  fontSize: 45,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
+              ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Colors.green, Colors.blue],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds),
+                blendMode: BlendMode.srcIn,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    'Welcome to Manipur',
+                    style: GoogleFonts.greatVibes(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 45,
+                      color: Colors.white, // Required for ShaderMask
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ), // Ensures proper masking
               ),
               const SizedBox(height: 10),
               Text(
@@ -57,6 +68,8 @@ class LoginPage extends StatelessWidget {
                   child: Card(
                     color: Colors.transparent,
                     shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                            color: Color.fromARGB(255, 153, 153, 153)),
                         borderRadius: BorderRadius.circular(15)),
                     elevation: 10,
                     child: Container(
@@ -65,11 +78,13 @@ class LoginPage extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(
                             color: const Color.fromARGB(255, 192, 191, 191)),
-                        color: const Color(0xFF2C2C2C).withOpacity(0.5),
+                        color: const Color.fromARGB(255, 218, 225, 209)
+                            .withOpacity(0.5),
                         borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
+                            color: const Color.fromARGB(255, 194, 193, 193)
+                                .withOpacity(0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 5),
                           ),
@@ -88,7 +103,7 @@ class LoginPage extends StatelessWidget {
                               Text(
                                 'Welcome!',
                                 style: GoogleFonts.kulimPark(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 25,
                                 ),
@@ -96,7 +111,7 @@ class LoginPage extends StatelessWidget {
                               Text(
                                 'Log in to your Account',
                                 style: GoogleFonts.kulimPark(
-                                  color: Colors.white54,
+                                  color: Colors.black54,
                                 ),
                               ),
                             ],
@@ -111,52 +126,56 @@ class LoginPage extends StatelessWidget {
                                 color: Color.fromARGB(179, 128, 127, 127),
                               ),
                               filled: true,
-                              fillColor: const Color(0xFF3A3A3A),
+                              fillColor:
+                                  const Color.fromARGB(255, 233, 231, 231),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               prefixIcon: const Icon(
                                 FontAwesomeIcons.user,
-                                color: Color.fromARGB(255, 222, 228, 211),
+                                color: Color.fromARGB(255, 7, 89, 1),
                                 size: 20,
                               ),
                             ),
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.black),
                           ),
                           const SizedBox(height: 15),
-            Obx(()=>
-          TextField(
-                    scrollPadding: const EdgeInsets.only(bottom: 200),
-                    controller: controller.passwordController,
-                    obscureText: controller.isObscured.value,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      hintStyle: const TextStyle(
-                        color: Color.fromARGB(179, 128, 127, 127),
-                      ),
-                      filled: true,
-                      fillColor: const Color(0xFF3A3A3A),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      prefixIcon: const Icon(
-                        FontAwesomeIcons.lock,
-                        color: Color.fromARGB(255, 222, 228, 211),
-                        size: 20,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-              controller.isObscured.value ? Icons.visibility_off : Icons.visibility,
-              color: const Color.fromARGB(255, 222, 228, 211),
-                        ),
-                        onPressed: () {
-           controller.setpasswordvisibility();
-                        },
-                      ),
-                    ),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-            ),
+                          Obx(
+                            () => TextField(
+                              scrollPadding: const EdgeInsets.only(bottom: 200),
+                              controller: controller.passwordController,
+                              obscureText: controller.isObscured.value,
+                              decoration: InputDecoration(
+                                hintText: 'Password',
+                                hintStyle: const TextStyle(
+                                  color: Color.fromARGB(179, 128, 127, 127),
+                                ),
+                                filled: true,
+                                fillColor:
+                                    const Color.fromARGB(255, 233, 231, 231),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                prefixIcon: const Icon(
+                                  FontAwesomeIcons.lock,
+                                  color: Color.fromARGB(255, 7, 89, 1),
+                                  size: 20,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    controller.isObscured.value
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: const Color.fromARGB(255, 7, 89, 1),
+                                  ),
+                                  onPressed: () {
+                                    controller.setpasswordvisibility();
+                                  },
+                                ),
+                              ),
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ),
                           const SizedBox(height: 15),
                           Obx(() => Row(
                                 children: [
@@ -169,7 +188,9 @@ class LoginPage extends StatelessWidget {
                                   ),
                                   const Text(
                                     'Stay signed in',
-                                    style: TextStyle(color: Colors.white70),
+                                    style: TextStyle(
+                                      color: Colors.black54,
+                                    ),
                                   ),
                                 ],
                               )),
@@ -177,9 +198,10 @@ class LoginPage extends StatelessWidget {
                           ElevatedButton(
                             onPressed: controller.validateAndLogin,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
+                              backgroundColor:
+                                  const Color.fromARGB(255, 7, 89, 1),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               minimumSize: const Size(double.infinity, 50),
                             ),
