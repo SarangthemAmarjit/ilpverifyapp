@@ -7,13 +7,14 @@ class DashboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(top: 10, bottom: 18),
       child: Card(
         color: Colors.white,
         shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.grey),
           borderRadius: BorderRadius.circular(12.0),
         ),
-        elevation: 4,
+        elevation: 10,
         child: const Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(

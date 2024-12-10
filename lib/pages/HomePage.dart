@@ -56,20 +56,17 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.only(top: 16,left: 20,right: 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Align(
                             alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16),
-                              child: Text(
-                                'Hi, Admin Welcome Back',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.grey,
-                                ),
+                            child: Text(
+                              'Hi, Admin Welcome Back',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
                               ),
                             )),
                         const DashboardCard(),
@@ -145,26 +142,22 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 20.0),
                         Column(
                           children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: TextFormField(
-                                controller: controller.permitController,
-                                decoration: InputDecoration(
-                                  labelStyle: const TextStyle(
-                                    color: Color.fromARGB(179, 128, 127, 127),
-                                  ),
-                                  labelText: 'Enter Permit Number',
-                                  filled: true,
-                                  fillColor:
-                                      const Color.fromARGB(255, 239, 241, 234),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
+                            TextFormField(
+                              controller: controller.permitController,
+                              decoration: InputDecoration(
+                                labelStyle: const TextStyle(
+                                  color: Color.fromARGB(179, 128, 127, 127),
                                 ),
-                                style: const TextStyle(
-                                  color: Color.fromARGB(255, 0, 10, 38),
+                                labelText: 'Enter Permit Number',
+                                filled: true,
+                                fillColor:
+                                    const Color.fromARGB(255, 239, 241, 234),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
+                              ),
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 10, 38),
                               ),
                             ),
                             const SizedBox(
