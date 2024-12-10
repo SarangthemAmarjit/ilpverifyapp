@@ -15,12 +15,12 @@ class DashboardCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
         ),
         elevation: 10,
-        child: const Padding(
-          padding: EdgeInsets.all(16.0),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               // Total Verified Section
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -40,7 +40,7 @@ class DashboardCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
               // Validated and Faked Section
               Row(
@@ -49,13 +49,29 @@ class DashboardCard extends StatelessWidget {
                   // Validated Section
                   Row(
                     children: [
-                      Icon(
-                        FontAwesomeIcons.checkToSlot,
-                        color: Color.fromARGB(255, 185, 244, 187),
-                        size: 45,
+                      Container(
+                        height: 43,
+                        width: 43,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                                color:
+                                    const Color.fromARGB(136, 188, 186, 186))),
+                        child: Opacity(
+                          opacity: 0.5,
+                          child: Image.asset(
+                            'assets/images/valid2.png',
+                            height: 20,
+                          ),
+                        ),
                       ),
-                      SizedBox(width: 12),
-                      Column(
+                      // Icon(
+                      //   FontAwesomeIcons.checkToSlot,
+                      //   color: Color.fromARGB(255, 185, 244, 187),
+                      //   size: 45,
+                      // ),
+                      const SizedBox(width: 12),
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
@@ -80,13 +96,37 @@ class DashboardCard extends StatelessWidget {
                   // Faked Section
                   Row(
                     children: [
-                      Icon(
-                        FontAwesomeIcons.triangleExclamation,
-                        color: Color.fromARGB(255, 219, 190, 188),
-                        size: 45,
+                      // Icon(
+                      //   FontAwesomeIcons.triangleExclamation,
+                      //   color: Color.fromARGB(255, 219, 190, 188),
+                      //   size: 45,
+                      // ),
+                      Container(
+                        height: 43,
+                        width: 43,
+                        decoration: BoxDecoration(
+                          // color: const Color.fromARGB(255, 212, 192, 191)
+                          //     .withOpacity(0.5),
+                          border: Border.all(
+                              color: const Color.fromARGB(136, 188, 186, 186)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
+                                topRight: Radius.circular(8)),
+                            child: Opacity(
+                              opacity:
+                                  0.5, // Value from 0.0 (completely transparent) to 1.0 (fully opaque)
+                              child: Image.asset(
+                                'assets/images/fakeok2.png',
+                                height: 25,
+                              ),
+                            )),
                       ),
-                      SizedBox(width: 12),
-                      Column(
+                      const SizedBox(width: 12),
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
