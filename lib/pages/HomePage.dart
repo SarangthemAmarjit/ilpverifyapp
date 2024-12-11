@@ -56,7 +56,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 16,left: 20,right: 20),
+                    padding:
+                        const EdgeInsets.only(top: 16, left: 20, right: 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -109,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: controller.startQRScan,
                           child: Card(
                             color: Colors.white,
-                            elevation: 10,
+                            elevation: 4,
                             child: Padding(
                               padding: const EdgeInsets.all(25),
                               child: ClipRRect(

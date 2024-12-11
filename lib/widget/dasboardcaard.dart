@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DashboardCard extends StatelessWidget {
   const DashboardCard({super.key});
@@ -14,7 +13,7 @@ class DashboardCard extends StatelessWidget {
           side: const BorderSide(color: Colors.grey),
           borderRadius: BorderRadius.circular(12.0),
         ),
-        elevation: 10,
+        elevation: 2,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(

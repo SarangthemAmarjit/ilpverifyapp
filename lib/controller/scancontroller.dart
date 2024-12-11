@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,13 +35,14 @@ class Scancontroller extends GetxController {
   List<Permit> get getmypermits => _mypermits;
   // Scanned data
   QrScannerModel? scannedModel;
- bool serviceEnabled = false;
-  RxString locationStatus = ''.obs; 
-  
+  bool serviceEnabled = false;
+  RxString locationStatus = ''.obs;
+
   var isConnected = false.obs;
 
   // Connectivity instance
-  final Connectivity _connectivity = Connectivity();// Observable to track location status
+  final Connectivity _connectivity =
+      Connectivity(); // Observable to track location status
   @override
   void onInit() {
     super.onInit();
@@ -48,11 +50,10 @@ class Scancontroller extends GetxController {
     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     checkLocationPermission(); // Call permission check when the controller initializes
     getMyPermits();
-
   }
-  
- // Check initial connection status
-Future<void> initConnectivity() async {
+
+  // Check initial connection status
+  Future<void> initConnectivity() async {
     late List<ConnectivityResult> result;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
@@ -62,70 +63,66 @@ Future<void> initConnectivity() async {
       return;
     }
 
-
-
     return _updateConnectionStatus(result);
   }
 
   // Update connection status
- Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
-    if(result.first== ConnectivityResult.none){
-        isConnected.value = false;
-    }else{
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    if (result.first == ConnectivityResult.none) {
+      isConnected.value = false;
+    } else {
       isConnected.value = true;
     }
   }
 
   bool isSameDate(DateTime? date1, DateTime? date2) {
-    if (date1 == null || date2 == null) return false; 
+    if (date1 == null || date2 == null) return false;
     return date1.year == date2.year &&
         date1.month == date2.month &&
         date1.day == date2.day;
   }
 
-
-  Future<void> getMyPermits()async{
-
-  //
-  _mypermits =await permitApiRepo.fetchPermits();
-  update();
-
+  Future<void> getMyPermits() async {
+    //
+    _mypermits = await permitApiRepo.fetchPermits();
+    update();
   }
-
-
 
   void verifyiilpdata() async {
     _isverifybuttonpress = true;
     update();
     try {
-      final response = await http.get(Uri.parse(
-          '$permitapi${permitController.text}'));
+      final response =
+          await http.get(Uri.parse('$permitapi${permitController.text}'));
 
       if (response.statusCode == 200) {
         print(response.body);
 
         allgetiltpdata = ilPmodelFromJson(
             response.body); // Assuming this function is parsing the response
-      //post data to my permit list
+        //post data to my permit list
         String? loc = await getLocation();
-        Permit x = Permit(id: "dupliPermit", permitId: allgetiltpdata?.permitNo??"NA", location: loc??"NA");
-      permitApiRepo.createPermit(x);
-      _mypermits.add(x);
-      update();
+        Permit x = Permit(
+            id: "dupliPermit",
+            permitId: allgetiltpdata?.permitNo ?? "NA",
+            location: loc ?? "NA");
+        permitApiRepo.createPermit(x);
+        _mypermits.add(x);
+        update();
 
-        if (scannedModel!.applicantName == allgetiltpdata!.name &&
-            scannedModel!.idNo == allgetiltpdata!.idNo &&
-            isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
-            isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
-          log('Valided');
-          _isfake = false;
-          _isvalided = true;
-          update();
-        } else {
-          _isfake = true;
-          _isvalided = false;
-          update();
-        }
+        // if (scannedModel!.applicantName == allgetiltpdata!.name &&
+        //     scannedModel!.idNo == allgetiltpdata!.idNo &&
+        //     isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
+        //     isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
+        //   log('Valided');
+        //   _isfake = false;
+        //   _isvalided = true;
+        //   update();
+        // } else {
+        //   _isfake = true;
+        //   _isvalided = false;
+        //   update();
+        // }
         log("Name : ${allgetiltpdata!.name}");
         _isverifybuttonpress = false;
         update();
@@ -157,12 +154,11 @@ Future<void> initConnectivity() async {
           'https://manipurilponline.mn.gov.in/api/permit/$permitnum'));
 
       if (response.statusCode == 200) {
-
         print(response.body);
 
         allgetiltpdata = ilPmodelFromJson(
             response.body); // Assuming this function is parsing the response
-        
+
         if (scannedModel!.applicantName == allgetiltpdata!.name &&
             scannedModel!.idNo == allgetiltpdata!.idNo &&
             isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
@@ -202,7 +198,6 @@ Future<void> initConnectivity() async {
 
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        
         '#ff6666', // Scanner overlay color
         'Cancel', // Cancel button text
         true, // Show flash icon
@@ -223,11 +218,11 @@ Future<void> initConnectivity() async {
       // Ensure it's not canceled
       try {
         // Parse the JSON data into QrScannerModel
-        
+
         final parsedData = qrScannerModelFromJson(barcodeScanRes);
-        
+
         scannedModel = parsedData; // Update the scanned data
-        print(scannedModel?.toJson().toString()??"");
+        print(scannedModel?.toJson().toString() ?? "");
         update();
         log(scannedModel!.permitNo);
         var ispermitnumvalided =
@@ -265,7 +260,6 @@ Future<void> initConnectivity() async {
   }
 
   Future<void> checkLocationPermission() async {
-   
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
