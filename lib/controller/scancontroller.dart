@@ -7,10 +7,12 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:ilpverifyapp/config/usecase.dart';
+import 'package:ilpverifyapp/const/enum.dart';
 import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/repositories/sendpermitrepository.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
-import 'package:ilpverifyapp/pages/applicantprofile.dart';
+import 'package:ilpverifyapp/pages/applicantprofiledetails.dart';
 import 'package:intl/intl.dart';
 
 import '../config/apis.dart';
@@ -26,6 +28,12 @@ class Scancontroller extends GetxController {
 
   bool _isvalided = false;
   bool get isvalided => _isvalided;
+
+  bool _isexpired = false;
+  bool get isexpired => _isexpired;
+
+  bool _isscantab = true;
+  bool get isscantab => _isscantab;
 
   bool _isverifybuttonpress = false;
   bool get isverifybuttonpress => _isverifybuttonpress;
@@ -50,6 +58,21 @@ class Scancontroller extends GetxController {
     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     checkLocationPermission(); // Call permission check when the controller initializes
     getMyPermits();
+  }
+
+  void resetbools() {
+    _isscantab = true;
+    update();
+  }
+
+  void setsegmenttype({required SegmentType type}) {
+    if (type == SegmentType.scan) {
+      _isscantab = true;
+      update();
+    } else {
+      _isscantab = false;
+      update();
+    }
   }
 
   // Check initial connection status
@@ -89,6 +112,7 @@ class Scancontroller extends GetxController {
   }
 
   void verifyiilpdata() async {
+    String? loc;
     _isverifybuttonpress = true;
     update();
     try {
@@ -101,7 +125,9 @@ class Scancontroller extends GetxController {
         allgetiltpdata = ilPmodelFromJson(
             response.body); // Assuming this function is parsing the response
         //post data to my permit list
-        String? loc = await getLocation();
+        if (serviceEnabled) {
+          loc = await getLocation();
+        } else {}
         Permit x = Permit(
             id: "dupliPermit",
             permitId: allgetiltpdata?.permitNo ?? "NA",
@@ -110,7 +136,8 @@ class Scancontroller extends GetxController {
         _mypermits.add(x);
         update();
 
-        // if (scannedModel!.applicantName == allgetiltpdata!.name &&
+        // if (scannedModel != null &&
+        //     scannedModel!.applicantName == allgetiltpdata!.name &&
         //     scannedModel!.idNo == allgetiltpdata!.idNo &&
         //     isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
         //     isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
@@ -126,7 +153,7 @@ class Scancontroller extends GetxController {
         log("Name : ${allgetiltpdata!.name}");
         _isverifybuttonpress = false;
         update();
-        Get.to(const ApplicantProfile());
+        Get.to(() => const ApplicantProfileDetails());
       } else {
         _isverifybuttonpress = false;
         update();
@@ -158,18 +185,28 @@ class Scancontroller extends GetxController {
 
         allgetiltpdata = ilPmodelFromJson(
             response.body); // Assuming this function is parsing the response
-
+        int remainingdays = remainingDays(allgetiltpdata!.validDate);
         if (scannedModel!.applicantName == allgetiltpdata!.name &&
             scannedModel!.idNo == allgetiltpdata!.idNo &&
             isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
             isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
           log('Valided');
-          _isfake = false;
-          _isvalided = true;
-          update();
+
+          if (remainingdays > 0) {
+            _isexpired = false;
+            _isfake = false;
+            _isvalided = true;
+            update();
+          } else {
+            _isexpired = true;
+            _isfake = false;
+            _isvalided = false;
+            update();
+          }
         } else {
           _isfake = true;
           _isvalided = false;
+          _isexpired = false;
           update();
         }
         log("Name : ${allgetiltpdata!.name}");
@@ -190,6 +227,10 @@ class Scancontroller extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
       return false;
     }
+  }
+
+  void deleteScanmodel() {
+    scannedModel = null;
   }
 
   // Method to start QR scan
@@ -228,7 +269,7 @@ class Scancontroller extends GetxController {
         var ispermitnumvalided =
             await getiilpdata(permitnum: scannedModel!.permitNo);
         if (ispermitnumvalided) {
-          Get.to(const ApplicantProfile());
+          Get.to(const ApplicantProfileDetails());
           _iswaitingfornextpage = false;
           update();
         } else {

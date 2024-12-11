@@ -5,127 +5,108 @@ class DashboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 18),
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+    return const Padding(
+      padding: EdgeInsets.only(top: 10, bottom: 25),
+      child: Column(
+        children: [
+          Row(
             children: [
-              // Total Verified Section
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Total Verified",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    "10", // Example count
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ],
+              Expanded(
+                child: DashbaordCardWidget(
+                    icon: 'assets/images/total.png',
+                    title: 'Total Verified',
+                    number: 10,
+                    numcolor: Colors.blue),
               ),
-              const SizedBox(height: 16.0),
-
-              // Validated and Faked Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Validated Section
-                  Row(
-                    children: [
-                      Opacity(
-                        opacity: 0.5,
-                        child: Image.asset(
-                          'assets/images/valid2.png',
-                          height: 45,
-                        ),
-                      ),
-                      // Icon(
-                      //   FontAwesomeIcons.checkToSlot,
-                      //   color: Color.fromARGB(255, 185, 244, 187),
-                      //   size: 45,
-                      // ),
-                      const SizedBox(width: 12),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "Valid",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            "8 Cards", // Example count
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  // Faked Section
-                  Row(
-                    children: [
-                      // Icon(
-                      //   FontAwesomeIcons.triangleExclamation,
-                      //   color: Color.fromARGB(255, 219, 190, 188),
-                      //   size: 45,
-                      // ),
-                      Opacity(
-                        opacity:
-                            0.5, // Value from 0.0 (completely transparent) to 1.0 (fully opaque)
-                        child: Image.asset(
-                          'assets/images/fakeok.png',
-                          height: 45,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "Fake",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            "2 Cards", // Example count
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              Expanded(
+                child: DashbaordCardWidget(
+                    icon: 'assets/images/valid2.png',
+                    title: 'Valid',
+                    number: 8,
+                    numcolor: Colors.green),
+              )
             ],
           ),
+          Row(
+            children: [
+              Expanded(
+                child: DashbaordCardWidget(
+                    icon: 'assets/images/expiredicon.png',
+                    title: 'Expired',
+                    number: 1,
+                    numcolor: Colors.orange),
+              ),
+              Expanded(
+                child: DashbaordCardWidget(
+                    icon: 'assets/images/fakeok.png',
+                    title: 'Fake',
+                    number: 1,
+                    numcolor: Colors.red),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class DashbaordCardWidget extends StatelessWidget {
+  final String icon;
+  final String title;
+  final int number;
+  final Color numcolor;
+  const DashbaordCardWidget({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.number,
+    required this.numcolor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            // Icon(
+            //   FontAwesomeIcons.triangleExclamation,
+            //   color: Color.fromARGB(255, 219, 190, 188),
+            //   size: 45,
+            // ),
+            Opacity(
+              opacity:
+                  0.5, // Value from 0.0 (completely transparent) to 1.0 (fully opaque)
+              child: Image.asset(
+                icon,
+                height: 45,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  "$number Cards", // Example count
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: numcolor),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
