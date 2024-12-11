@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
-import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/pages/HomePage.dart';
-import 'package:ilpverifyapp/pages/internetconnectivity/internetconnectivity.dart';
-
-import 'homepages/verifiedlist.dart';
 
 class MainScreen extends StatefulWidget {
   static const String routename = "/homescreen";
@@ -66,39 +62,48 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<Scancontroller>(
-      builder: (scanctrl) {
-        return  Obx(()=>
-          scanctrl.isConnected.value?
-           Scaffold(
-            body:  _pages[_selectedIndex],
-            bottomNavigationBar: BottomNavigationBar(
-              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-              elevation: 10,
-              selectedFontSize: 16,
-              selectedItemColor: Colors.green,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.qr_code_scanner),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.list),
-                  label: 'Verified List',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.logout),
-                  label: 'Log Out',
-                ),
-              ],
-              currentIndex: _selectedIndex,
-              onTap: _onItemTapped,
-            ),
-          ):const InternetConnectivityPage(),
-        );
-      }
+    return Scaffold(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+      
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        elevation: 10,
+        selectedFontSize: 16,
+        selectedItemColor: Colors.green,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.qr_code_scanner),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Verified List',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.logout),
+            label: 'Log Out',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
 
+class VerifiedListPage extends StatelessWidget {
+  const VerifiedListPage({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Verified List'),
+      ),
+      body: const Center(
+        child: Text('List of Verified Cards'),
+      ),
+    );
+  }
+}

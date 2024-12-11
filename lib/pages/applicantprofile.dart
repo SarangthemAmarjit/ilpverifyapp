@@ -19,14 +19,13 @@ class ApplicantProfile extends StatelessWidget {
       body: GetBuilder<Scancontroller>(builder: (_) {
         return Container(
           height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: const AssetImage('assets/images/bg4.png'),
+              image: const AssetImage('assets/images/bghome2.png'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                const Color.fromARGB(255, 137, 229, 141).withOpacity(0.1),
-                BlendMode.darken,
+                const Color.fromARGB(255, 232, 231, 231).withOpacity(0.7),
+                BlendMode.lighten,
               ),
             ),
           ),
@@ -36,14 +35,11 @@ class ApplicantProfile extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     )
                   : SingleChildScrollView(
-                    child: Container(
-                      child: Stack(children: [
+                      child: Container(
+                        child: Stack(children: [
                           Center(
                               child: Column(
-                                                      children: [
-                              const SizedBox(
-                                height: 30,
-                              ),
+                            children: [
                               Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -53,7 +49,8 @@ class ApplicantProfile extends StatelessWidget {
                                         clipper: WaveClipperTwo(flip: true),
                                         child: Container(
                                           height: 200,
-                                          width: MediaQuery.of(context).size.width,
+                                          width:
+                                              MediaQuery.of(context).size.width,
                                           decoration: BoxDecoration(
                                               color: const Color.fromARGB(
                                                   255, 237, 237, 227),
@@ -75,7 +72,8 @@ class ApplicantProfile extends StatelessWidget {
                                         height: 80,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 20),
+                                        padding:
+                                            const EdgeInsets.only(left: 20),
                                         child: Align(
                                             alignment: Alignment.bottomLeft,
                                             child: Container(
@@ -101,14 +99,17 @@ class ApplicantProfile extends StatelessWidget {
                                                   context,
                                                 ),
                                                 builder: (context, snapshot) {
-                                                  if (snapshot.connectionState ==
+                                                  if (snapshot
+                                                          .connectionState ==
                                                       ConnectionState.done) {
                                                     // Image is loaded
                                                     return const SizedBox
                                                         .shrink(); // Empty child as the image is already in decoration
-                                                  } else if (snapshot.hasError) {
+                                                  } else if (snapshot
+                                                      .hasError) {
                                                     // Error loading image
-                                                    return const Icon(Icons.error,
+                                                    return const Icon(
+                                                        Icons.error,
                                                         size: 50,
                                                         color: Colors.red);
                                                   } else {
@@ -127,11 +128,12 @@ class ApplicantProfile extends StatelessWidget {
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
                                 child: Container(
                                   height: 2,
                                   width: MediaQuery.of(context).size.width,
-                                  color: const Color.fromARGB(255, 244, 171, 196),
+                                  color: const Color.fromARGB(255, 47, 167, 6),
                                 ),
                               ),
                               const SizedBox(
@@ -180,35 +182,32 @@ class ApplicantProfile extends StatelessWidget {
                                 icon: Icons.location_on,
                               ),
                               const SizedBox(height: 20),
-                                                      ],
-                                                    )),
+                            ],
+                          )),
                           Positioned(
-                          bottom: 0,
-
-                          top: 300,
-                          left: 0,
-                          right: 0,
-                            child:
-                                  controller.isfake
-                                      ? Center(
-                                          child: Image.asset(
-                                            'assets/images/fake.png',
-                                            height: 150,
-                                          ),
-                                        )
-                                      : controller.isvalided
-                                          ? Center(
-                                              child: Image.asset(
-                                                'assets/images/verified.png',
-                                                height: 150,
-                                              ),
-                                            )
-                                          : const SizedBox(),
-                       
+                            bottom: 0,
+                            top: 300,
+                            left: 0,
+                            right: 0,
+                            child: controller.isfake
+                                ? Center(
+                                    child: Image.asset(
+                                      'assets/images/fake.png',
+                                      height: 150,
+                                    ),
+                                  )
+                                : controller.isvalided
+                                    ? Center(
+                                        child: Image.asset(
+                                          'assets/images/verified.png',
+                                          height: 150,
+                                        ),
+                                      )
+                                    : const SizedBox(),
                           )
                         ]),
-                    ),
-                  )),
+                      ),
+                    )),
         );
       }),
     );

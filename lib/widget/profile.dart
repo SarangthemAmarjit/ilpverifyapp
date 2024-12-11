@@ -19,7 +19,8 @@ class ProfileUpdate extends StatelessWidget {
       child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white.withOpacity(0.4)),
+              border: Border.all(color: Colors.black12),
+              color: Colors.white.withOpacity(0.7)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             
@@ -31,7 +32,7 @@ class ProfileUpdate extends StatelessWidget {
                     children: [
                       Icon(
                         icon,
-                        color: const Color.fromARGB(255, 244, 171, 196),
+                        color: const Color.fromARGB(255, 44, 114, 4),
                       ),
                       const SizedBox(
                         width: 10,
@@ -46,7 +47,7 @@ class ProfileUpdate extends StatelessWidget {
                 ),
                 Flexible(
                   child: Text(text2,
-                      overflow: TextOverflow.visible,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.kreon(fontSize: 18)),
                 ),
               ],
