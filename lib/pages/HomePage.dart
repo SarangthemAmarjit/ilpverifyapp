@@ -4,6 +4,8 @@ import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/widget/dasboardcaard.dart';
 import 'package:lottie/lottie.dart';
 
+import 'scanner/scanneroverlay.dart';
+
 class HomePage extends StatefulWidget {
   static const String routename = "HomePage";
   const HomePage({super.key});
@@ -106,7 +108,10 @@ class _HomePageState extends State<HomePage> {
 
                         // Scan Button
                         GestureDetector(
-                          onTap: controller.startQRScan,
+                          onTap: (){
+                                  controller.listenScan();
+                               Get.to(()=>BarcodeScannerWithOverlay());
+                          },
                           child: Card(
                             color: Colors.white,
                             elevation: 10,

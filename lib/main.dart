@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
         // Use a Google Font for the entire app
         textTheme: GoogleFonts.kulimParkTextTheme(),
         appBarTheme: const AppBarTheme(
+          centerTitle: true,
           toolbarHeight: 80,
           color: Colors.green,
           foregroundColor: Colors.white

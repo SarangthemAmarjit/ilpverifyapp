@@ -12,11 +12,14 @@ import 'package:ilpverifyapp/model/scannermodel.dart';
 import 'package:ilpverifyapp/pages/applicantprofile.dart';
 import 'package:ilpverifyapp/pages/applicantprofiledetails.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../config/apis.dart';
 import '../model/permit.dart';
 
 class Scancontroller extends GetxController {
+
+  MobileScannerController? controller;
   final PermitRepoImpl permitApiRepo = PermitRepoImpl();
   IlPmodel? allgetiltpdata;
   final permitController = TextEditingController();
@@ -93,7 +96,21 @@ Future<void> initConnectivity() async {
 
   }
 
+void listenScan(){
 
+   controller = MobileScannerController(
+    formats: const [BarcodeFormat.qrCode],
+  );
+  if (controller!=null) {
+  controller!.barcodes.listen((event) async{
+    if(event.barcodes.first.displayValue!=null && event.barcodes.first.displayValue!.isNotEmpty){
+      print("In scanner scan not empty");
+        await startQRScan(event.barcodes.first.displayValue!);
+        
+    }
+  },);
+}
+} 
 
   void verifyiilpdata() async {
      String? loc;
@@ -137,7 +154,7 @@ Future<void> initConnectivity() async {
         log("Name : ${allgetiltpdata!.name}");
         _isverifybuttonpress = false;
         update();
-        Get.to(const ApplicantProfileDetails());
+        // Get.to(const ApplicantProfileDetails());
       } else {
         _isverifybuttonpress = false;
         update();
@@ -162,7 +179,7 @@ Future<void> initConnectivity() async {
   Future<bool> getiilpdata({required String permitnum}) async {
     try {
       final response = await http.get(Uri.parse(
-          'https://manipurilponline.mn.gov.in/api/permit/$permitnum'));
+          '$permitapi$permitnum'));
 
       if (response.statusCode == 200) {
 
@@ -208,25 +225,27 @@ Future<void> initConnectivity() async {
     scannedModel = null;
   }
   // Method to start QR scan
-  Future<void> startQRScan() async {
-    String barcodeScanRes;
+  Future<void> startQRScan(String barcodeScanRes) async {
 
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+         // Get.off(()=>const ApplicantProfileDetails());
+    // String barcodeScanRes;
+
+    // try {
+    //   barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
         
-        '#ff6666', // Scanner overlay color
-        'Cancel', // Cancel button text
-        true, // Show flash icon
-        ScanMode.QR, // Set scan mode to QR
-      );
-    } on PlatformException {
-      barcodeScanRes = 'Failed to start QR scanner.';
-      Get.snackbar("Error", "Failed to start QR scanner.",
-          backgroundColor: const Color.fromARGB(255, 233, 92, 92),
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM);
-      return;
-    }
+    //     '#ff6666', // Scanner overlay color
+    //     'Cancel', // Cancel button text
+    //     true, // Show flash icon
+    //     ScanMode.QR, // Set scan mode to QR
+    //   );
+    // } on PlatformException {
+    //   barcodeScanRes = 'Failed to start QR scanner.';
+    //   Get.snackbar("Error", "Failed to start QR scanner.",
+    //       backgroundColor: const Color.fromARGB(255, 233, 92, 92),
+    //       colorText: Colors.white,
+    //       snackPosition: SnackPosition.BOTTOM);
+    //   return;
+    // }
 
     if (barcodeScanRes.isNotEmpty && barcodeScanRes != '-1') {
       _iswaitingfornextpage = true;
@@ -244,7 +263,10 @@ Future<void> initConnectivity() async {
         var ispermitnumvalided =
             await getiilpdata(permitnum: scannedModel!.permitNo);
         if (ispermitnumvalided) {
-          Get.to(const ApplicantProfileDetails());
+          if(controller!.barcodes.isBroadcast){
+            
+          }
+          // Get.off(()=>const ApplicantProfileDetails());
           _iswaitingfornextpage = false;
           update();
         } else {
@@ -274,7 +296,11 @@ Future<void> initConnectivity() async {
       }
     }
   }
-
+  void disposeController(){
+    if(controller!=null){
+      controller!.dispose();
+    }
+  }
   Future<void> checkLocationPermission() async {
    
     LocationPermission permission;

@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/pages/HomePage.dart';
 
+import 'homepages/verifiedlist.dart';
+
 class MainScreen extends StatefulWidget {
   static const String routename = "/homescreen";
   const MainScreen({super.key});
@@ -91,19 +93,3 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-class VerifiedListPage extends StatelessWidget {
-  const VerifiedListPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Verified List'),
-      ),
-      body: const Center(
-        child: Text('List of Verified Cards'),
-      ),
-    );
-  }
-}

@@ -52,11 +52,11 @@ class LoginController extends GetxController {
     // }
     else {
       //res = {"String":"int"} {1 - sucess,-1 - error,3 - catch exception}
-      Map<String, int> res =
+      Map<String,String?> res =
           await authenticationRepo.loginUser(username, password);
 
       //set values to shared preferences is login is successfull
-      if (res.entries.first.value == 1) {
+      if (res.entries.first.value !=null) {
         _islogin = true;
         pref.setString('token', username);
     
