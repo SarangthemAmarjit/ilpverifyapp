@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ilpverifyapp/const/enum.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
+import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/pages/HomePage.dart';
 
 import 'homepages/verifiedlist.dart';
@@ -34,6 +36,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void _showLogoutDialog() {
     LoginController logcontroller = Get.find<LoginController>();
+    Scancontroller scancontroller = Get.find<Scancontroller>();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -52,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   logcontroller.logout();
+                  scancontroller.resetbools();
                 },
                 child: const Text('Log Out'),
               ),
@@ -65,13 +69,23 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+            backgroundColor: Colors.white,
+      appBar: AppBar(
+        // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
+        title: const Text(
+          'ILP VERIFIER',
+          style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
+        ),
+        centerTitle: true,
+      ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-      
+        
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         elevation: 10,
         selectedFontSize: 16,
-        selectedItemColor: Colors.green,
+        selectedItemColor: greencol,
+      
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.qr_code_scanner),

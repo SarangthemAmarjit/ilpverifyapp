@@ -5,7 +5,6 @@ import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/widget/profile.dart';
 
 import '../config/usecase.dart';
-import '../widget/shimmer.dart';
 
 class ApplicantProfileDetails extends StatelessWidget {
   const ApplicantProfileDetails({super.key});
@@ -21,25 +20,21 @@ class ApplicantProfileDetails extends StatelessWidget {
       },
       child: GetBuilder<Scancontroller>(builder: (_) {
           return Scaffold(
-          backgroundColor: Colors.grey[800],
+        backgroundColor: const Color.fromARGB(255, 232, 240, 228),
         appBar: AppBar(
-          // backgroundColor: controller.isfake?Colors.red:Colors.green, 
-          backgroundColor: Colors.grey[800],
+          backgroundColor: controller.isfake?Colors.red:Colors.green, 
           title: const Text("Verification"),
         ),
         body: controller.allgetiltpdata == null
-            ? ShimmerCards()
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
             : SingleChildScrollView(
               child: Container(
                            decoration: BoxDecoration(
-          // gradient: LinearGradient(colors: [controller.isfake? Colors.red: Colors.green,controller.isfake? Colors.red[100]!: Colors.green[100]!,Colors.white],
-          // begin: Alignment.topCenter,
-          // end: Alignment.bottomCenter
-          // )
-              gradient: LinearGradient(colors: [Colors.grey[800]!,Colors.grey[900]!, Colors.grey[800]!,Colors.grey[900]!,],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight
-
+          gradient: LinearGradient(colors: [controller.isfake? Colors.red: Colors.green,controller.isfake? Colors.red[100]!: Colors.green[100]!,Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter
           )
           // image: DecorationImage(
           //   image: const AssetImage('assets/images/bg4.png'),
@@ -53,7 +48,9 @@ class ApplicantProfileDetails extends StatelessWidget {
                 child: Stack(children: [
                     Column(
                                             children: [
-        
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Stack(
                       // alignment: Alignment.center,
                       children: [
@@ -80,103 +77,61 @@ class ApplicantProfileDetails extends StatelessWidget {
                         //   ],
                         // ),
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                      
-                                Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                              const SizedBox(
-                                  height: 20,
-                                ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20),
-                                      child: Container(
-                                        height: 100,
-                                        width: 100,
-                                        
-                                        decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                          // borderRadius:
-                                          //     BorderRadius.circular(30),
-                                          border: Border.all(
-                                              color:Colors.green,
-                                              width: 3),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(controller
-                                                .allgetiltpdata!.photo),
-                                          ),
-                                        ),
-                                        child: FutureBuilder<void>(
-                                          future: precacheImage(
-                                            NetworkImage(controller
-                                                .allgetiltpdata!.photo),
-                                            context,
-                                          ),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.done) {
-                                              // Image is loaded
-                                              return const SizedBox
-                                                  .shrink(); // Empty child as the image is already in decoration
-                                            } else if (snapshot.hasError) {
-                                              // Error loading image
-                                              return const Icon(Icons.error,
-                                                  size: 50,
-                                                  color: Colors.red);
-                                            } else {
-                                              // Loading indicator
-                                              return const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              );
-                                            }
-                                          },
-                                        ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    height: 150,
+                                    width: 150,
+                                    
+                                    decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                      // borderRadius:
+                                      //     BorderRadius.circular(30),
+                                      border: Border.all(
+                                          color:Colors.green,
+                                          width: 3),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(controller
+                                            .allgetiltpdata!.photo),
                                       ),
                                     ),
-                                    SizedBox(height: 10,),
-                                             Padding(
-                                               padding: const EdgeInsets.symmetric(horizontal: 16),
-                                               child: Text("${controller.allgetiltpdata?.name}",style: TextStyle(color: Colors.white,fontSize: 16,letterSpacing: 5,fontWeight: FontWeight.bold),),
-                                             ),
-                                  ],
-                                ),
-
-                                Container(
-                                  
-                                       padding: const EdgeInsets.all(16),
-                                                               margin: const EdgeInsets.all(16),
-                                          
-                                                              
-                                                               decoration: BoxDecoration(
-                                
-                                gradient: LinearGradient(colors: [Colors.blue[900]!,Colors.blue]),
-                                 borderRadius: BorderRadius.circular(8),
-                                 color: Colors.blueGrey
-                                
-                                                               ),
-                                  child: Column(
-                                  
-                                    children: [
-                                        Row(
-                                          children: [
-                                            Icon(FontAwesomeIcons.calendarDays,size: 16,color: Colors.white,),
-                                            SizedBox(width: 10,),
-                                            Text("Remaining Days",style: const TextStyle(color: Colors.white,fontSize: 16)),
-                                          ],
-                                        ),
-                                                                 Text("${remainingDays(controller.allgetiltpdata!.validDate).toString()}",style: const TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)
-                                    ],
-                                  )
-                                )
-
-                              ],
-                            ), 
+                                    child: FutureBuilder<void>(
+                                      future: precacheImage(
+                                        NetworkImage(controller
+                                            .allgetiltpdata!.photo),
+                                        context,
+                                      ),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.done) {
+                                          // Image is loaded
+                                          return const SizedBox
+                                              .shrink(); // Empty child as the image is already in decoration
+                                        } else if (snapshot.hasError) {
+                                          // Error loading image
+                                          return const Icon(Icons.error,
+                                              size: 50,
+                                              color: Colors.red);
+                                        } else {
+                                          // Loading indicator
+                                          return const Center(
+                                            child:
+                                                CircularProgressIndicator(),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  )),
+                            ),
+                            SizedBox(height: 10,),
+                                     Text("${controller.allgetiltpdata?.name}",style: TextStyle(color: Colors.white,fontSize: 20,letterSpacing: 5,fontWeight: FontWeight.bold),), 
                               Container(
                           
                                padding: const EdgeInsets.all(16),
@@ -229,9 +184,9 @@ class ApplicantProfileDetails extends StatelessWidget {
                                 
                                     ),
                                 
-                                //   SizedBox(height: 20,),
-                                //  Text("Remaining Days",style: const TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,),
-                                //  Text("${remainingDays(controller.allgetiltpdata!.validDate).toString()}",style: const TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)
+                                  SizedBox(height: 20,),
+                                 Text("Remaining Days",style: const TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,),
+                                 Text("${remainingDays(controller.allgetiltpdata!.validDate).toString()}",style: const TextStyle(color: Colors.white,fontSize: 20),textAlign: TextAlign.center,)
                                   ],
                               
                               
@@ -243,7 +198,7 @@ class ApplicantProfileDetails extends StatelessWidget {
                               Container(
                           
                                padding: const EdgeInsets.all(16),
-                               margin: const EdgeInsets.symmetric(vertical:4,horizontal: 16),
+                               margin: const EdgeInsets.all(16),
                                
                                width: double.maxFinite,
                                decoration: BoxDecoration(
@@ -281,40 +236,17 @@ class ApplicantProfileDetails extends StatelessWidget {
                     // ),
                     const SizedBox(
                     
-                      height: 10,
+                      height: 30,
                     ),
                     Container(
                       // padding: EdgeInsets.all(16),
                       margin: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: Colors.white,
-                        boxShadow: [
-
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            spreadRadius: 5,
-                            offset: Offset(1, 1),
-                          )
-                        ]
+                        color: Colors.white
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(Icons.person,size: 18,),
-                                SizedBox(width: 5,),
-                                Text("Personal Details",style: TextStyle(fontSize: 20),),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10,),
-
                           ProfileUpdate(
                             text1: "Name : ",
                             text2: controller.allgetiltpdata!.name,
@@ -335,15 +267,10 @@ class ApplicantProfileDetails extends StatelessWidget {
                             text2: controller.allgetiltpdata!.parentName,
                             icon: Icons.people,
                           ),
-                               ProfileUpdate(
-                            text1: "ID Proof: ",
-                            text2: controller.allgetiltpdata!.idProof,
-                            icon: Icons.badge_outlined,
-                          ),
                           ProfileUpdate(
                             text1: "ID No: ",
                             text2: controller.allgetiltpdata!.idNo,
-                            icon: Icons.badge_rounded,
+                            icon: Icons.badge,
                           ),
                           ProfileUpdate(
                             text1: "Date of Issue: ",
@@ -357,40 +284,11 @@ class ApplicantProfileDetails extends StatelessWidget {
                                 controller.allgetiltpdata!.validDate),
                             icon: Icons.calendar_today,
                           ),
-                            
-                         ProfileUpdate(
+                          ProfileUpdate(
                             text1: "Place of Stay: ",
-                            text2:"${ controller.allgetiltpdata!.residingPlace} ${controller.allgetiltpdata?.residingDistrict}",
+                            text2: controller.allgetiltpdata!.residingPlace,
                             icon: Icons.location_on,
                           ),
-
-                                ProfileUpdate(
-                            text1: "Local Resident: ",
-                            text2:
-                                controller.allgetiltpdata!.localResident,
-                            icon: Icons.place_outlined,
-                          ),
-                                        ProfileUpdate(
-                            text1: "Pin Code: ",
-                            text2:
-                                controller.allgetiltpdata!.residingPinCode,
-                            icon: Icons.place_outlined,
-                          ),
-                                                     ProfileUpdate(
-                            text1: "Purpose: ",
-                            text2:
-                               "${controller.allgetiltpdata!.purposeCategory}-${ controller.allgetiltpdata!.purpose}",
-                            icon: Icons.place_outlined,
-                          ),
-
-
-                                                     ProfileUpdate(
-                            text1: "Home State: ",
-                            text2:
-                               "${controller.allgetiltpdata!.state}",
-                            icon: Icons.place_outlined,
-                          ),
-                
                         ],
                       ),
                     ),
@@ -409,7 +307,6 @@ class ApplicantProfileDetails extends StatelessWidget {
                                     child: Image.asset(
                                       'assets/images/fake.png',
                                       height: 150,
-                                      
                                     ),
                                   )
                                 : controller.isvalided

@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ilpverifyapp/const/enum.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/pages/authhandler.dart';
-import 'package:ilpverifyapp/pages/navbar.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,25 +24,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      title: "ILP VERIFIER",
       theme: ThemeData(
+        
         // Use a Google Font for the entire app
         textTheme: GoogleFonts.kulimParkTextTheme(),
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          toolbarHeight: 80,
-          color: Colors.green,
-          foregroundColor: Colors.white
-        ),
-        elevatedButtonTheme:ElevatedButtonThemeData(
+        // textTheme: GoogleFonts.montserratTextTheme(),
+        
+        appBarTheme: AppBarTheme(
+            toolbarHeight: 80, color: greencol, foregroundColor: Colors.white),
+        elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              minimumSize: const Size(
-                                  100, 50), // Minimum size for the button
-                            ),
-        ) ,
+            backgroundColor: greencol,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            minimumSize: const Size(100, 50), // Minimum size for the button
+          ),
+        ),
         // Optionally customize specific text styles
         primaryTextTheme: GoogleFonts.montserratTextTheme(),
       ),

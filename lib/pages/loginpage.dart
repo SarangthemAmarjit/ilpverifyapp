@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ilpverifyapp/const/enum.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
 
 class LoginPage extends StatelessWidget {
@@ -131,9 +132,9 @@ class LoginPage extends StatelessWidget {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              prefixIcon: const Icon(
+                              prefixIcon: Icon(
                                 FontAwesomeIcons.user,
-                                color: Color.fromARGB(255, 7, 89, 1),
+                                color: greencol,
                                 size: 20,
                               ),
                             ),
@@ -156,9 +157,9 @@ class LoginPage extends StatelessWidget {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                prefixIcon: const Icon(
+                                prefixIcon: Icon(
                                   FontAwesomeIcons.lock,
-                                  color: Color.fromARGB(255, 7, 89, 1),
+                                  color: greencol,
                                   size: 20,
                                 ),
                                 suffixIcon: IconButton(
@@ -166,7 +167,7 @@ class LoginPage extends StatelessWidget {
                                     controller.isObscured.value
                                         ? Icons.visibility_off
                                         : Icons.visibility,
-                                    color: const Color.fromARGB(255, 7, 89, 1),
+                                    color: greencol,
                                   ),
                                   onPressed: () {
                                     controller.setpasswordvisibility();
@@ -180,12 +181,11 @@ class LoginPage extends StatelessWidget {
                           Obx(() => Row(
                                 children: [
                                   Checkbox(
-                                    value: controller.isStayed.value,
-                                    onChanged: (value) {
-                                      controller.isStayed.value = value!;
-                                    },
-                                    activeColor: Colors.green,
-                                  ),
+                                      value: controller.isStayed.value,
+                                      onChanged: (value) {
+                                        controller.isStayed.value = value!;
+                                      },
+                                      activeColor: greencol),
                                   const Text(
                                     'Stay signed in',
                                     style: TextStyle(
@@ -198,8 +198,6 @@ class LoginPage extends StatelessWidget {
                           ElevatedButton(
                             onPressed: controller.validateAndLogin,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 7, 89, 1),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),

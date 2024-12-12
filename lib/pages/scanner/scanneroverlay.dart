@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ilpverifyapp/const/enum.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -32,7 +33,7 @@ class _BarcodeScannerWithOverlayState extends State<BarcodeScannerWithOverlay> {
     return GetBuilder<Scancontroller>(
       builder: (scanctrl) {
         return Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor:greencol,
           
           body:scanctrl.controller==null?const Center(child: CircularProgressIndicator()) : SafeArea(
             child: Stack(
@@ -40,6 +41,7 @@ class _BarcodeScannerWithOverlayState extends State<BarcodeScannerWithOverlay> {
               children: [
                 Positioned.fill(
                   child: MobileScanner(
+                  
                     fit: BoxFit.contain,
                     controller: scanctrl.controller,
                     scanWindow: scanWindow,

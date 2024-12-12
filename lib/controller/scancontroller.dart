@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,10 +7,11 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:ilpverifyapp/config/usecase.dart';
+import 'package:ilpverifyapp/const/enum.dart';
 import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/repositories/sendpermitrepository.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
-import 'package:ilpverifyapp/pages/applicantprofile.dart';
 import 'package:ilpverifyapp/pages/applicantprofiledetails.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -30,21 +32,30 @@ class Scancontroller extends GetxController {
   bool _isvalided = false;
   bool get isvalided => _isvalided;
 
+  bool _isexpired = false;
+  bool get isexpired => _isexpired;
+
+  bool _isscantab = true;
+  bool get isscantab => _isscantab;
+
   bool _isverifybuttonpress = false;
   bool get isverifybuttonpress => _isverifybuttonpress;
   bool _isfake = false;
   bool get isfake => _isfake;
   List<Permit> _mypermits = [];
   List<Permit> get getmypermits => _mypermits;
+  List<Permit>  _mypermitsFilter = [];
+  List<Permit> get getmypermitsFilter => _mypermitsFilter;
   // Scanned data
   QrScannerModel? scannedModel;
- bool serviceEnabled = false;
-  RxString locationStatus = ''.obs; 
-  
+  bool serviceEnabled = false;
+  RxString locationStatus = ''.obs;
+  verifylistFilter verifiedList = verifylistFilter.all;
   var isConnected = false.obs;
-
-  // Connectivity instance
-  final Connectivity _connectivity = Connectivity();// Observable to track location status
+  bool permitlistLoading = false;
+    // Connectivity instance
+  final Connectivity _connectivity =
+      Connectivity(); // Observable to track location status
   @override
   void onInit() {
     super.onInit();
@@ -52,11 +63,51 @@ class Scancontroller extends GetxController {
     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     checkLocationPermission(); // Call permission check when the controller initializes
     getMyPermits();
+  }
+
+  void resetbools() {
+    _isscantab = true;
+    update();
+  }
+
+  void setsegmenttype({required SegmentType type}) {
+    if (type == SegmentType.scan) {
+      _isscantab = true;
+      update();
+    } else {
+      _isscantab = false;
+      update();
+    }
+  }
+
+  void searchlistFilter(filter){
+      verifiedList = filter;
+      
+      update();
+      switch(filter){
+          case verifylistFilter.all:
+          
+       
+          break;      
+          case verifylistFilter.verified:
+       
+          break;
+          case verifylistFilter.expired:
+          break;
+          case verifylistFilter.fake:
+          break;
+          default:
+          break;
+      }
+
+      update();
 
   }
-  
- // Check initial connection status
-Future<void> initConnectivity() async {
+
+
+
+  // Check initial connection status
+  Future<void> initConnectivity() async {
     late List<ConnectivityResult> result;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
@@ -66,34 +117,33 @@ Future<void> initConnectivity() async {
       return;
     }
 
-
-
     return _updateConnectionStatus(result);
   }
 
   // Update connection status
- Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
-    if(result.first== ConnectivityResult.none){
-        isConnected.value = false;
-    }else{
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
+    if (result.first == ConnectivityResult.none) {
+      isConnected.value = false;
+    } else {
       isConnected.value = true;
     }
   }
 
   bool isSameDate(DateTime? date1, DateTime? date2) {
-    if (date1 == null || date2 == null) return false; 
+    if (date1 == null || date2 == null) return false;
     return date1.year == date2.year &&
         date1.month == date2.month &&
         date1.day == date2.day;
   }
 
-
-  Future<void> getMyPermits()async{
-
-  //
-  _mypermits =await permitApiRepo.fetchPermits();
-  update();
-
+  Future<void> getMyPermits() async {
+    //ds
+    permitlistLoading = true;
+    update();
+    _mypermits = await permitApiRepo.fetchPermits();
+    _mypermitsFilter = _mypermits;
+        permitlistLoading = false;
+    update();
   }
 
 void listenScan(){
@@ -113,44 +163,44 @@ void listenScan(){
 } 
 
   void verifyiilpdata() async {
-     String? loc;
+    String? loc;
     _isverifybuttonpress = true;
     update();
     try {
-      final response = await http.get(Uri.parse(
-          '$permitapi${permitController.text}'));
+      final response =
+          await http.get(Uri.parse('$permitapi${permitController.text}'));
 
       if (response.statusCode == 200) {
         print(response.body);
 
         allgetiltpdata = ilPmodelFromJson(
             response.body); // Assuming this function is parsing the response
-      //post data to my permit list
-      if(serviceEnabled){
+        //post data to my permit list
+        if (serviceEnabled) {
+          loc = await getLocation();
+        } else {}
+        Permit x = Permit(
+            id: "dupliPermit",
+            permitId: allgetiltpdata?.permitNo ?? "NA",
+            location: loc ?? "NA");
+        permitApiRepo.createPermit(x);
+        _mypermits.add(x);
+        update();
 
-       loc = await getLocation();
-      }else{
-
-
-      }
-        Permit x = Permit(id: "dupliPermit", permitId: allgetiltpdata?.permitNo??"NA", location: loc??"NA");
-      permitApiRepo.createPermit(x);
-      _mypermits.add(x);
-      update();
-
-        if (scannedModel!=null && scannedModel!.applicantName == allgetiltpdata!.name &&
-            scannedModel!.idNo == allgetiltpdata!.idNo &&
-            isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
-            isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
-          log('Valided');
-          _isfake = false;
-          _isvalided = true;
-          update();
-        } else {
-          _isfake = true;
-          _isvalided = false;
-          update();
-        }
+        // if (scannedModel != null &&
+        //     scannedModel!.applicantName == allgetiltpdata!.name &&
+        //     scannedModel!.idNo == allgetiltpdata!.idNo &&
+        //     isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
+        //     isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
+        //   log('Valided');
+        //   _isfake = false;
+        //   _isvalided = true;
+        //   update();
+        // } else {
+        //   _isfake = true;
+        //   _isvalided = false;
+        //   update();
+        // }
         log("Name : ${allgetiltpdata!.name}");
         _isverifybuttonpress = false;
         update();
@@ -182,23 +232,32 @@ void listenScan(){
           '$permitapi$permitnum'));
 
       if (response.statusCode == 200) {
-
         print(response.body);
 
         allgetiltpdata = ilPmodelFromJson(
             response.body); // Assuming this function is parsing the response
-        
+        int remainingdays = remainingDays(allgetiltpdata!.validDate);
         if (scannedModel!.applicantName == allgetiltpdata!.name &&
             scannedModel!.idNo == allgetiltpdata!.idNo &&
             isSameDate(scannedModel!.dateOfIssue, allgetiltpdata!.issueDate) &&
             isSameDate(scannedModel!.validUpto, allgetiltpdata!.validDate)) {
           log('Valided');
-          _isfake = false;
-          _isvalided = true;
-          update();
+
+          if (remainingdays > 0) {
+            _isexpired = false;
+            _isfake = false;
+            _isvalided = true;
+            update();
+          } else {
+            _isexpired = true;
+            _isfake = false;
+            _isvalided = false;
+            update();
+          }
         } else {
           _isfake = true;
           _isvalided = false;
+          _isexpired = false;
           update();
         }
         log("Name : ${allgetiltpdata!.name}");
@@ -221,9 +280,10 @@ void listenScan(){
     }
   }
 
-  void deleteScanmodel(){
+  void deleteScanmodel() {
     scannedModel = null;
   }
+
   // Method to start QR scan
   Future<void> startQRScan(String barcodeScanRes) async {
 
@@ -253,11 +313,11 @@ void listenScan(){
       // Ensure it's not canceled
       try {
         // Parse the JSON data into QrScannerModel
-        
+
         final parsedData = qrScannerModelFromJson(barcodeScanRes);
-        
+
         scannedModel = parsedData; // Update the scanned data
-        print(scannedModel?.toJson().toString()??"");
+        print(scannedModel?.toJson().toString() ?? "");
         update();
         log(scannedModel!.permitNo);
         var ispermitnumvalided =
@@ -302,7 +362,6 @@ void listenScan(){
     }
   }
   Future<void> checkLocationPermission() async {
-   
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
