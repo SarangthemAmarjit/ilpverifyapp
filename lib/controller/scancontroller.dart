@@ -8,10 +8,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:ilpverifyapp/config/usecase.dart';
-import 'package:ilpverifyapp/const/enum.dart';
+import 'package:ilpverifyapp/const/constant.dart';
+import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/repositories/sendpermitrepository.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
+import 'package:ilpverifyapp/pages/applicantprofiledetails%20copy.dart';
 import 'package:ilpverifyapp/pages/applicantprofiledetails.dart';
 import 'package:intl/intl.dart';
 
@@ -22,6 +24,11 @@ class Scancontroller extends GetxController {
   final PermitRepoImpl permitApiRepo = PermitRepoImpl();
   IlPmodel? allgetiltpdata;
   final permitController = TextEditingController();
+  int _selectedIndex = 0;
+  int get selectedIndex => _selectedIndex;
+
+    String? _cardstatusname;
+  String? get cardstatusname => _cardstatusname;
 
   bool _iswaitingfornextpage = false;
   bool get iswaitingfornextpage => _iswaitingfornextpage;
@@ -58,6 +65,53 @@ class Scancontroller extends GetxController {
     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     checkLocationPermission(); // Call permission check when the controller initializes
     getMyPermits();
+  }
+
+void setcardstatus({required String name}) {
+_cardstatusname = name;
+update();
+}
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, s) {
+          return AlertDialog(
+            title: const Text('Confirm Logout'),
+            content: const Text('Are you sure you want to log out?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Get.find<LoginController>().logout();
+                  resetbools();
+                },
+                child: const Text('Log Out'),
+              ),
+            ],
+          );
+        });
+      },
+    );
+  }
+
+  void onItemTapped(int index, BuildContext context) {
+    if (index == 2) {
+      _showLogoutDialog(context);
+    } else {
+      _selectedIndex = index;
+      update();
+    }
+    if (index == 1) {
+      _isscantab = true;
+      update();
+    }
   }
 
   void resetbools() {
@@ -151,9 +205,10 @@ class Scancontroller extends GetxController {
         //   update();
         // }
         log("Name : ${allgetiltpdata!.name}");
-        _isverifybuttonpress = false;
+  
+        Get.to(() => const ApplicantProfileDetails2());
+              _isverifybuttonpress = false;
         update();
-        Get.to(() => const ApplicantProfileDetails());
       } else {
         _isverifybuttonpress = false;
         update();
@@ -177,8 +232,7 @@ class Scancontroller extends GetxController {
 
   Future<bool> getiilpdata({required String permitnum}) async {
     try {
-      final response = await http.get(Uri.parse(
-          'https://manipurilponline.mn.gov.in/api/permit/$permitnum'));
+      final response = await http.get(Uri.parse('$permitapi$permitnum'));
 
       if (response.statusCode == 200) {
         print(response.body);
@@ -235,6 +289,7 @@ class Scancontroller extends GetxController {
 
   // Method to start QR scan
   Future<void> startQRScan() async {
+    // Get.off(()=>const ApplicantProfileDetails());
     String barcodeScanRes;
 
     try {
@@ -269,7 +324,7 @@ class Scancontroller extends GetxController {
         var ispermitnumvalided =
             await getiilpdata(permitnum: scannedModel!.permitNo);
         if (ispermitnumvalided) {
-          Get.to(const ApplicantProfileDetails());
+          // Get.off(()=>const ApplicantProfileDetails());
           _iswaitingfornextpage = false;
           update();
         } else {

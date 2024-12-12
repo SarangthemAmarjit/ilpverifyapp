@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
+import 'package:ilpverifyapp/widget/shimmerlist.dart';
 
 
 class VerifiedListPage extends StatelessWidget {
@@ -14,9 +15,12 @@ class VerifiedListPage extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Verified List'),
           ),
-          body:scancontroller.getmypermits.isEmpty? const Center(
-            child: Text('List of Verified Cards'),
-          ):ListView(
+          body:scancontroller.getmypermits.isEmpty?
+          //  const Center(
+          //   child: Text('List of Verified Cards'),
+          // )
+          ShimmerLists()
+          :ListView(
            
             children:scancontroller.getmypermits.map((d)=> Card(
               margin: const EdgeInsets.symmetric(vertical: 8),

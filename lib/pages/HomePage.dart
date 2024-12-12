@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ilpverifyapp/const/enum.dart';
+import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/widget/dasboardcaard.dart';
 import 'package:lottie/lottie.dart';
@@ -32,9 +32,18 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
-        title: const Text(
-          'ILP Card Verification',
-          style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: 40,
+            ),
+            const Text(
+              ' Card Verification',
+              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
+            ),
+          ],
         ),
         centerTitle: true,
       ),
@@ -121,9 +130,7 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(7),
                           ),
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                color:
-                                    const Color.fromARGB(255, 197, 196, 196)),
+                            border: Border.all(color: bordercolorsecondary),
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8),
                             // gradient: const LinearGradient(
@@ -247,6 +254,8 @@ class _HomePageState extends State<HomePage> {
                                   TextFormField(
                                     controller: controller.permitController,
                                     decoration: InputDecoration(
+                                      disabledBorder:
+                                          const OutlineInputBorder(),
                                       labelStyle: const TextStyle(
                                         color:
                                             Color.fromARGB(179, 128, 127, 127),
@@ -255,6 +264,17 @@ class _HomePageState extends State<HomePage> {
                                       filled: true,
                                       fillColor: const Color.fromARGB(
                                           255, 239, 241, 234),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: bordercolor, width: 1.0),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: greencolsecondary,
+                                            width: 2.0),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),

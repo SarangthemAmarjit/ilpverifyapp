@@ -19,12 +19,12 @@ class ProfileUpdate extends StatelessWidget {
       child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.black12),
+              // border: Border.all(color: Colors.black12),
               color: Colors.white.withOpacity(0.7)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Flexible(
@@ -40,6 +40,7 @@ class ProfileUpdate extends StatelessWidget {
                       Text(
                         text1,
                         overflow: TextOverflow.visible,
+                        textAlign: TextAlign.left,
                         style: GoogleFonts.kreon(fontSize: 18),
                       ),
                     ],
@@ -47,7 +48,8 @@ class ProfileUpdate extends StatelessWidget {
                 ),
                 Flexible(
                   child: Text(text2,
-                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
+                      overflow: TextOverflow.visible,
                       style: GoogleFonts.kreon(fontSize: 18)),
                 ),
               ],
