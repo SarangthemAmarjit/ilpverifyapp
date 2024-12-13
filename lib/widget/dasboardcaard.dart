@@ -88,7 +88,7 @@ class DashbaordCardWidget extends StatelessWidget {
                   0.5, // Value from 0.0 (completely transparent) to 1.0 (fully opaque)
               child: Image.asset(
                 icon,
-                height: title == 'Expired' ? 38 : 45,
+                height: title == 'Expired' ? 30 : 35,
               ),
             ),
             const SizedBox(width: 12),
@@ -97,15 +97,18 @@ class DashbaordCardWidget extends StatelessWidget {
               children: [
                 Text(
                   title,
+                  textAlign: TextAlign.end,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
+                  
                   number > 1
                       ? "$number Cards"
                       : "$number Card", // Example count
+                  textAlign: TextAlign.end,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

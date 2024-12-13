@@ -17,6 +17,7 @@ import 'package:ilpverifyapp/pages/applicantprofiledetails%20copy.dart';
 import 'package:intl/intl.dart';
 
 import '../config/apis.dart';
+import '../const/enum.dart';
 import '../model/permit.dart';
 
 class Scancontroller extends GetxController {
@@ -49,13 +50,16 @@ class Scancontroller extends GetxController {
   bool get isfake => _isfake;
   List<Permit> _mypermits = [];
   List<Permit> get getmypermits => _mypermits;
+  List<Permit> _mypermitsFilter = [];
+  List<Permit> get getmypermitsFilter => _mypermitsFilter;
   // Scanned data
   QrScannerModel? scannedModel;
   bool serviceEnabled = false;
   RxString locationStatus = ''.obs;
-
+  verifylistFilter verifiedList = verifylistFilter.all;
   var isConnected = false.obs;
-
+  bool permitlistLoading = false;
+  bool scanStart = false;
   // Connectivity instance
   final Connectivity _connectivity =
       Connectivity(); // Observable to track location status
@@ -66,6 +70,7 @@ class Scancontroller extends GetxController {
     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     checkLocationPermission(); // Call permission check when the controller initializes
     getMyPermits();
+    setsegmenttype(type: SegmentType.scan);
   }
 
   void setcardstatus({required String name}) {
@@ -136,6 +141,26 @@ class Scancontroller extends GetxController {
     }
   }
 
+  void searchlistFilter(filter) {
+    verifiedList = filter;
+
+    update();
+    switch (filter) {
+      case verifylistFilter.all:
+        break;
+      case verifylistFilter.verified:
+        break;
+      case verifylistFilter.expired:
+        break;
+      case verifylistFilter.fake:
+        break;
+      default:
+        break;
+    }
+
+    update();
+  }
+
   // Check initial connection status
   Future<void> initConnectivity() async {
     late List<ConnectivityResult> result;
@@ -167,10 +192,30 @@ class Scancontroller extends GetxController {
   }
 
   Future<void> getMyPermits() async {
-    //
+    //ds
+    permitlistLoading = true;
+    update();
     _mypermits = await permitApiRepo.fetchPermits();
+    _mypermitsFilter = _mypermits;
+    permitlistLoading = false;
     update();
   }
+
+// void listenScan(){
+
+//    controller = MobileScannerController(
+//     formats: const [BarcodeFormat.qrCode],
+//   );
+//   if (controller!=null) {
+//   controller!.barcodes.listen((event) async{
+//     if(event.barcodes.first.displayValue!=null && event.barcodes.first.displayValue!.isNotEmpty){
+//       print("In scanner scan not empty");
+//         await startQRScan(event.barcodes.first.displayValue!);
+
+//     }
+//   },);
+// }
+// }
 
   void verifyiilpdata() async {
     String? loc;
@@ -216,6 +261,7 @@ class Scancontroller extends GetxController {
         Get.to(() => const ApplicantProfileDetails2());
         _isverifybuttonpress = false;
         update();
+        // Get.to(const ApplicantProfileDetails());
       } else {
         _isverifybuttonpress = false;
         update();

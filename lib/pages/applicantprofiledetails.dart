@@ -14,9 +14,9 @@ class ApplicantProfileDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     Scancontroller controller = Get.find<Scancontroller>();
 
-    return PopScope(
+    return PopScope (
       canPop: true,
-      onPopInvokedWithResult: (v, i) {
+      onPopInvokedWithResult: (v,i){
         controller.deleteScanmodel();
       },
       child: GetBuilder<Scancontroller>(builder: (_) {

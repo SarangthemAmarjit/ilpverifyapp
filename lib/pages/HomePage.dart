@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
@@ -28,26 +29,9 @@ class _HomePageState extends State<HomePage> {
     // Initialize the HomeController
     Scancontroller controller = Get.find<Scancontroller>();
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/logo.png',
-              height: 40,
-            ),
-            const Text(
-              ' Card Verification',
-              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
-            ),
-          ],
-        ),
-        centerTitle: true,
-      ),
-      body: GetBuilder<Scancontroller>(builder: (_) {
+    return SizedBox(
+ 
+      child: GetBuilder<Scancontroller>(builder: (_) {
         log("isscantab : ${controller.isscantab}");
         return controller.iswaitingfornextpage
             ? Center(
@@ -83,8 +67,8 @@ class _HomePageState extends State<HomePage> {
                                 fontSize: 18,
                                 color: Colors.grey,
                               ),
-                            )),
-                        const DashboardCard(),
+                            )).animate().fadeIn().slideY(begin: 1,end: 0),
+                        const DashboardCard().animate().fadeIn().scaleXY(begin: 0.5,end: 1),
                         // Title and Instructions
 
                         // Text(
@@ -112,8 +96,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SegmentType.manual: Text(
                               'Manual Verification',
+                              overflow: TextOverflow.ellipsis,
                               style: controller.isscantab
                                   ? const TextStyle(
+                                      // color: Colors.black,
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal)
                                   : const TextStyle(
@@ -145,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                           onValueChanged: (v) {
                             controller.setsegmenttype(type: v);
                           },
-                        ),
+                        ).animate().fadeIn().slideY(begin: 3,end: 0),
 
                         //  Scan Button
                         controller.isscantab
@@ -167,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                                       end: Alignment.bottomRight,
                                     ).createShader(bounds),
                                     child: const Text(
-                                      'Scan to Verify ILP Card.',
+                                      'Scan to Verify',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 24.0,
@@ -181,7 +167,11 @@ class _HomePageState extends State<HomePage> {
                                     height: 20,
                                   ),
                                   GestureDetector(
-                                    onTap: controller.startQRScan,
+                                    onTap: () {
+                                      // Get.to(() =>
+                                      //     const BarcodeScannerWithOverlay());
+                                      controller.startQRScan();
+                                    },
                                     child: Card(
                                       color: Colors.white,
                                       elevation: 4,
@@ -196,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    ).animate().shimmer(color: Colors.grey[200],delay: Durations.extralong2,duration: const Duration(milliseconds: 600)),
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -212,6 +202,12 @@ class _HomePageState extends State<HomePage> {
                                   const SizedBox(height: 20.0),
                                 ],
                               )
+                                .animate()
+                                .fadeIn(duration: Durations.medium4)
+                                .scaleXY(
+                                    begin: 0.6,
+                                    end: 1,
+                                    duration: const Duration(milliseconds: 300))
                             :
 
                             // const Text(
@@ -238,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                                       end: Alignment.bottomRight,
                                     ).createShader(bounds),
                                     child: const Text(
-                                      'Enter Permit Number to Verify ILP Card',
+                                      'Enter Permit Number',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 24.0,
@@ -260,7 +256,12 @@ class _HomePageState extends State<HomePage> {
                                         color:
                                             Color.fromARGB(179, 128, 127, 127),
                                       ),
-                                      labelText: 'Enter Permit Number',
+                                      labelText: 'Permit Number',
+                                      hintText: "Eg: IATXXXXXXXX.....XXX",
+                                      hintStyle: const TextStyle(
+                                          color: Color.fromARGB(
+                                              179, 128, 127, 127),
+                                          fontSize: 14),
                                       filled: true,
                                       fillColor: const Color.fromARGB(
                                           255, 239, 241, 234),
@@ -286,47 +287,56 @@ class _HomePageState extends State<HomePage> {
                                   const SizedBox(
                                       height:
                                           25), // Add spacing between the TextField and Button
-                                  controller.isverifybuttonpress
-                                      ? const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      : ElevatedButton(
-                                          onPressed: () {
-                                            if (controller.permitController.text
-                                                .isEmpty) {
-                                              Get.snackbar("Error",
-                                                  "Permit number cannot be empty",
-                                                  backgroundColor:
-                                                      const Color.fromARGB(
-                                                          255, 233, 92, 92),
-                                                  colorText: Colors.white,
-                                                  snackPosition:
-                                                      SnackPosition.BOTTOM);
-                                            } else {
-                                              controller.verifyiilpdata();
-                                            }
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            minimumSize: const Size(100,
-                                                50), // Minimum size for the button
-                                          ),
-                                          child: const Text(
-                                            'Verify Now',
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      //to check if the button is loading or calling data
+                                      //if it is press the function is not called
+                                      if (!controller.isverifybuttonpress) {
+                                        if (controller
+                                            .permitController.text.isEmpty) {
+                                          Get.snackbar("Error",
+                                              "Permit number cannot be empty",
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 233, 92, 92),
+                                              colorText: Colors.white,
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM);
+                                        } else {
+                                          controller.verifyiilpdata();
+                                        }
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: greencol,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      minimumSize: const Size(100,
+                                          50), // Minimum size for the button
+                                    ),
+                                    child: controller.isverifybuttonpress
+                                        ? const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(color: Colors.white,))
+                                        : const Text(
+                                            'Verify',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                               color: Colors.white,
                                             ),
                                           ),
-                                        ),
+                                  ),
                                 ],
                               )
+                                .animate()
+                                .fadeIn(duration: Durations.medium4)
+                                .scaleXY(
+                                    begin: 0.6,
+                                    end: 1,
+                                    duration: const Duration(milliseconds: 300))
                       ],
                     ),
                   ),

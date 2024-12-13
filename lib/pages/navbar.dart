@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/pages/HomePage.dart';
+import 'package:ilpverifyapp/pages/homepages/profile.dart';
+import 'package:ilpverifyapp/pages/loadingpage.dart';
 
 import 'homepages/verifiedlist.dart';
 
@@ -16,48 +19,129 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
- 
+  int _selectedIndex = 0;
 
+  final List<Widget> _pages = [
+    const HomePage(), // Replace with your actual HomePage implementation
+    const VerifiedListPage(),
+    const ProfilePage(), // Placeholder for logout button; it won't navigate
+  ];
 
+  void _onItemTapped(int index) {
+    if (index == 3) {
+      _showLogoutDialog();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
 
-
-
+  void _showLogoutDialog() {
+    LoginController logcontroller = Get.find<LoginController>();
+    Scancontroller scancontroller = Get.find<Scancontroller>();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, s) {
+          return AlertDialog(
+            title: const Row(
+              children: [
+                Icon(
+                  FontAwesomeIcons.arrowRightFromBracket,
+                  size: 14,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text('Logout'),
+              ],
+            ),
+            content: const Text('Are you sure you want to log out?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  showLoadingDialog(context: context);
+                  Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+                    logcontroller.logout();
+                    scancontroller.resetbools();
+                    Navigator.of(context).pop();
+                  });
+                },
+                child: const Text('Log Out'),
+              ),
+            ],
+          );
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-        
-    Scancontroller scancontroller = Get.find<Scancontroller>();
-    return GetBuilder<Scancontroller>(
-      builder: (_) {
-        return Scaffold(
-          body: navpages[scancontroller.selectedIndex],
-          bottomNavigationBar: BottomNavigationBar(
-            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            elevation: 10,
-            selectedFontSize: 16,
-            selectedItemColor: greencol,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.qr_code_scanner),
-                label: 'Home',
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: 38,
+            ),
+            const Text(
+              'Verifier',
+              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
+            ),
+          ],
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: IconButton(
+              icon: const Icon(
+                FontAwesomeIcons.powerOff,
+                size: 16,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: 'Verified List',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.logout),
-                label: 'Log Out',
-              ),
-            ],
-            currentIndex:scancontroller.selectedIndex,
-          onTap: (value) {
-            scancontroller.onItemTapped(value, context);
-          },
+              onPressed: () {
+                _onItemTapped(3);
+              },
+            ),
+          )
+        ],
+      ),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        elevation: 10,
+        selectedFontSize: 16,
+        selectedItemColor: greencol,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.qr_code_scanner),
+            label: 'Home',
           ),
-        );
-      }
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: ' Permits',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
-

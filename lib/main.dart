@@ -14,7 +14,7 @@ void main() {
 
   // Initialize LocationController
   Get.put(LoginController()); // Registers the controller as a singleton
-  Get.put(Scancontroller()); // Registers the controller as a singleton
+  Get.put(Scancontroller());  // Registers the controller as a singleton
   runApp(const MyApp());
 }
 
@@ -24,9 +24,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      title: "ILP VERIFIER",
       theme: ThemeData(
+        
         // Use a Google Font for the entire app
         textTheme: GoogleFonts.kulimParkTextTheme(),
+        // textTheme: GoogleFonts.montserratTextTheme(),
+        
         appBarTheme: AppBarTheme(
             toolbarHeight: 80, color: greencol, foregroundColor: Colors.white),
         elevatedButtonTheme: ElevatedButtonThemeData(
