@@ -547,161 +547,232 @@ class ApplicantProfileDetails2 extends StatelessWidget {
                                 : Column(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 16,
-                                            right: 16,
-                                            top: 5,
-                                            bottom: 15),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Column(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
+                                              const Text(
+                                                "Details verified?",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
                                               Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
                                                 children: [
-                                                  const Text(
-                                                    'Set Verification Status : ',
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        border: Border.all(
-                                                            color: const Color
-                                                                .fromARGB(255,
-                                                                71, 71, 71))),
-                                                    child:
-                                                        DropdownButton2<String>(
-                                                      customButton: SizedBox(
-                                                        width: controller
-                                                                    .cardstatusname ==
-                                                                null
-                                                            ? null
-                                                            : 150,
-                                                        child: Center(
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceAround,
-                                                            children: [
-                                                              Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
-                                                                  child: controller
-                                                                              .cardstatusname ==
-                                                                          null
-                                                                      ? const Text(
-                                                                          'Select Card Status',
-                                                                          style:
-                                                                              TextStyle(color: Colors.grey),
-                                                                        )
-                                                                      : Text(controller
-                                                                          .cardstatusname!)),
-                                                              const Icon(
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          62,
-                                                                          61,
-                                                                          61),
-                                                                  Icons
-                                                                      .arrow_drop_down)
-                                                            ],
-                                                          ),
-                                                        ),
+                                                  Row(
+                                                    children: [
+                                                      Radio<String>(
+                                                        value: "Yes",
+                                                        groupValue: controller
+                                                            .selectedOption,
+                                                        onChanged: (value) {
+                                                          // Handle "Yes" selection
+                                                          controller
+                                                              .setverifiedoption(
+                                                                  name: value!);
+                                                        },
                                                       ),
-                                                      isDense: true,
-                                                      dropdownStyleData: DropdownStyleData(
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10)),
-                                                          offset: const Offset(
-                                                              0, -4)),
-                                                      barrierColor:
-                                                          Colors.transparent,
-
-                                                      style: const TextStyle(
-                                                          color: Colors.black),
-                                                      alignment:
-                                                          Alignment.center,
-
-                                                      value: controller
-                                                          .cardstatusname,
-                                                      onChanged:
-                                                          (String? newValue) {
-                                                        controller
-                                                            .setcardstatus(
-                                                                name:
-                                                                    newValue!);
-                                                      },
-                                                      items: cardstatus
-                                                          .map((String value) {
-                                                        return DropdownMenuItem<
-                                                            String>(
-                                                          value: value,
-                                                          child: Text(
-                                                            value,
-                                                          ),
-                                                        );
-                                                      }).toList(),
-
-                                                      underline: const SizedBox
-                                                          .shrink(), // Removes the underline
-                                                    ),
+                                                      const Text("Yes"),
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Radio<String>(
+                                                        value: "No",
+                                                        groupValue: controller
+                                                            .selectedOption,
+                                                        onChanged: (value) {
+                                                          // Handle "No" selection
+                                                          controller
+                                                              .setverifiedoption(
+                                                                  name: value!);
+                                                        },
+                                                      ),
+                                                      const Text("No"),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                              controller.cardstatusname != null
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 10,
-                                                              bottom: 5),
-                                                      child: ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                            ),
-                                                            minimumSize:
-                                                                const Size(
-                                                                    20, 40),
-                                                          ),
-                                                          onPressed: () {},
-                                                          child: const Text(
-                                                            'Save',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          )),
-                                                    )
-                                                  : const SizedBox()
-                                            ],
-                                          ),
-                                        ),
+                                            ]),
                                       ),
+                                      controller.selectedOption == 'Yes'
+                                          ? Column(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 16,
+                                                          right: 16,
+                                                          top: 5,
+                                                          bottom: 15),
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    width: double.maxFinite,
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: Colors.grey),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            const Text(
+                                                              'Set Verification Status : ',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            Container(
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                  border: Border.all(
+                                                                      color: const Color
+                                                                          .fromARGB(
+                                                                          255,
+                                                                          71,
+                                                                          71,
+                                                                          71))),
+                                                              child:
+                                                                  DropdownButton2<
+                                                                      String>(
+                                                                customButton:
+                                                                    SizedBox(
+                                                                  width: controller
+                                                                              .cardstatusname ==
+                                                                          null
+                                                                      ? null
+                                                                      : 150,
+                                                                  child: Center(
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceAround,
+                                                                      children: [
+                                                                        Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child: controller.cardstatusname == null
+                                                                                ? const Text(
+                                                                                    'Select Card Status',
+                                                                                    style: TextStyle(color: Colors.grey),
+                                                                                  )
+                                                                                : Text(controller.cardstatusname!)),
+                                                                        const Icon(
+                                                                            color: Color.fromARGB(
+                                                                                255,
+                                                                                62,
+                                                                                61,
+                                                                                61),
+                                                                            Icons.arrow_drop_down)
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                isDense: true,
+                                                                dropdownStyleData: DropdownStyleData(
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                10)),
+                                                                    offset:
+                                                                        const Offset(
+                                                                            0,
+                                                                            -4)),
+                                                                barrierColor: Colors
+                                                                    .transparent,
+
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .black),
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+
+                                                                value: controller
+                                                                    .cardstatusname,
+                                                                onChanged: (String?
+                                                                    newValue) {
+                                                                  controller
+                                                                      .setcardstatus(
+                                                                          name:
+                                                                              newValue!);
+                                                                },
+                                                                items: cardstatus
+                                                                    .map((String
+                                                                        value) {
+                                                                  return DropdownMenuItem<
+                                                                      String>(
+                                                                    value:
+                                                                        value,
+                                                                    child: Text(
+                                                                      value,
+                                                                    ),
+                                                                  );
+                                                                }).toList(),
+
+                                                                underline:
+                                                                    const SizedBox
+                                                                        .shrink(), // Removes the underline
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        controller.cardstatusname !=
+                                                                null
+                                                            ? Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        top: 10,
+                                                                        bottom:
+                                                                            5),
+                                                                child:
+                                                                    ElevatedButton(
+                                                                        style: ElevatedButton
+                                                                            .styleFrom(
+                                                                          shape:
+                                                                              RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                          ),
+                                                                          minimumSize: const Size(
+                                                                              20,
+                                                                              40),
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {},
+                                                                        child:
+                                                                            const Text(
+                                                                          'Save',
+                                                                          style:
+                                                                              TextStyle(color: Colors.white),
+                                                                        )),
+                                                              )
+                                                            : const SizedBox()
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : const SizedBox(),
                                       Container(
                                         padding: const EdgeInsets.all(16),
                                         margin: const EdgeInsets.symmetric(

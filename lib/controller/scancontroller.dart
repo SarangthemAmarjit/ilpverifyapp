@@ -27,7 +27,9 @@ class Scancontroller extends GetxController {
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
 
-    String? _cardstatusname;
+  String _selectedOption = 'No'; // To store the selected radio button value
+  String get selectedOption => _selectedOption;
+  String? _cardstatusname;
   String? get cardstatusname => _cardstatusname;
 
   bool _iswaitingfornextpage = false;
@@ -67,10 +69,16 @@ class Scancontroller extends GetxController {
     getMyPermits();
   }
 
-void setcardstatus({required String name}) {
-_cardstatusname = name;
-update();
-}
+  void setcardstatus({required String name}) {
+    _cardstatusname = name;
+    update();
+  }
+
+  void setverifiedoption({required String name}) {
+    _selectedOption = name;
+    update();
+  }
+
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -205,9 +213,9 @@ update();
         //   update();
         // }
         log("Name : ${allgetiltpdata!.name}");
-  
+
         Get.to(() => const ApplicantProfileDetails2());
-              _isverifybuttonpress = false;
+        _isverifybuttonpress = false;
         update();
       } else {
         _isverifybuttonpress = false;
