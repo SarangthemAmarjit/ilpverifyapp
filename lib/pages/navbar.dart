@@ -10,82 +10,13 @@ import 'package:ilpverifyapp/pages/loadingpage.dart';
 
 import 'homepages/verifiedlist.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   static const String routename = "/homescreen";
   const MainScreen({super.key});
 
   @override
-  _MainScreenState createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    const HomePage(), // Replace with your actual HomePage implementation
-    const VerifiedListPage(),
-    const ProfilePage(), // Placeholder for logout button; it won't navigate
-  ];
-
-  void _onItemTapped(int index) {
-    if (index == 3) {
-      _showLogoutDialog();
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-  }
-
-  void _showLogoutDialog() {
-    LoginController logcontroller = Get.find<LoginController>();
-    Scancontroller scancontroller = Get.find<Scancontroller>();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, s) {
-          return AlertDialog(
-            title: const Row(
-              children: [
-                Icon(
-                  FontAwesomeIcons.arrowRightFromBracket,
-                  size: 14,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text('Logout'),
-              ],
-            ),
-            content: const Text('Are you sure you want to log out?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  showLoadingDialog(context: context);
-                  Future.delayed(const Duration(seconds: 2)).whenComplete(() {
-                    logcontroller.logout();
-                    scancontroller.resetbools();
-                    Navigator.of(context).pop();
-                  });
-                },
-                child: const Text('Log Out'),
-              ),
-            ],
-          );
-        });
-      },
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Scancontroller scancontroller = Get.find<Scancontroller>();
     return WillPopScope(
       onWillPop: () async {
         final shouldExit = await showDialog<bool>(
@@ -107,63 +38,67 @@ class _MainScreenState extends State<MainScreen> {
         );
         return shouldExit ?? false;
       },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                height: 38,
-              ),
-              const Text(
-                'Scanner',
-                style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
-              ),
+      child: GetBuilder<Scancontroller>(builder: (_) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
+            title: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 38,
+                ),
+                const Text(
+                  'Scanner',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
+                ),
+              ],
+            ),
+            centerTitle: true,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: IconButton(
+                  icon: const Icon(
+                    FontAwesomeIcons.powerOff,
+                    size: 16,
+                  ),
+                  onPressed: () {
+                    scancontroller.onItemTapped(3, context);
+                  },
+                ),
+              )
             ],
           ),
-          centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: IconButton(
-                icon: const Icon(
-                  FontAwesomeIcons.powerOff,
-                  size: 16,
+          body: navpages[scancontroller.selectedIndex],
+          bottomNavigationBar: BottomNavigationBar(
+              selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+              elevation: 10,
+              selectedFontSize: 16,
+              selectedItemColor: greencol,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.qr_code_scanner),
+                  label: 'Home',
                 ),
-                onPressed: () {
-                  _onItemTapped(3);
-                },
-              ),
-            )
-          ],
-        ),
-        body: _pages[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-          elevation: 10,
-          selectedFontSize: 16,
-          selectedItemColor: greencol,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code_scanner),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: ' Permits',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
-      ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.list),
+                  label: ' Permits',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
+              currentIndex: scancontroller.selectedIndex,
+              onTap: (index) {
+                scancontroller.onItemTapped(index, context);
+              }),
+        );
+      }),
     );
   }
 }

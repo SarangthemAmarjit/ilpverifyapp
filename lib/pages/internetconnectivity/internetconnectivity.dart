@@ -6,7 +6,7 @@ class InternetConnectivityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Connection Error"),centerTitle: true,),
+    
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

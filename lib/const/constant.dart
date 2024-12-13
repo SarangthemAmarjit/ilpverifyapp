@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ilpverifyapp/pages/HomePage.dart';
+import 'package:ilpverifyapp/pages/homepages/profile.dart';
 import 'package:ilpverifyapp/pages/homepages/verifiedlist.dart';
 
 enum SegmentType { scan, manual }
@@ -13,7 +14,7 @@ Color greencoltextfocus = const Color(0xff008631).withOpacity(0.5);
 final List<Widget> navpages = [
   const HomePage(), // Replace with your actual HomePage implementation
   const VerifiedListPage(),
-  const SizedBox.shrink(), // Placeholder for logout button; it won't navigate
+  const ProfilePage(), // Placeholder for logout button; it won't navigate
 ];
 
 final List<String> cardstatus = ['Valid', 'Expire', 'Fake'];

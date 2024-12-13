@@ -23,6 +23,8 @@ import '../model/permit.dart';
 class Scancontroller extends GetxController {
   final PermitRepoImpl permitApiRepo = PermitRepoImpl();
   IlPmodel? allgetiltpdata;
+  IlPmodel? _currentPermitData;
+  IlPmodel? get getcurrentPermitData=>_currentPermitData;
   final permitController = TextEditingController();
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
@@ -60,7 +62,9 @@ class Scancontroller extends GetxController {
   var isConnected = false.obs;
   bool permitlistLoading = false;
   bool scanStart = false;
-  // Connectivity instance
+  bool isFetchPermit = false;
+  String fetchPermitmessage = "";
+    // Connectivity instance
   final Connectivity _connectivity =
       Connectivity(); // Observable to track location status
   @override
@@ -114,13 +118,13 @@ class Scancontroller extends GetxController {
   }
 
   void onItemTapped(int index, BuildContext context) {
-    if (index == 2) {
+    if (index == 3) {
       _showLogoutDialog(context);
     } else {
       _selectedIndex = index;
       update();
     }
-    if (index == 1) {
+    if (index == 1||index == 2) {
       _isscantab = true;
       update();
     }
@@ -407,6 +411,20 @@ class Scancontroller extends GetxController {
       }
     }
   }
+
+  void fetchPermitById(String permitNo)async{
+
+isFetchPermit = true;
+update();
+Map<String,IlPmodel?> x = await permitApiRepo.fetchPermitData(permitNo);
+_currentPermitData = x.entries.first.value;
+
+fetchPermitmessage = x.entries.first.key;
+isFetchPermit = false;
+update();
+  }
+
+
 
   Future<void> checkLocationPermission() async {
     LocationPermission permission;
