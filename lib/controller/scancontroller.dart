@@ -14,7 +14,6 @@ import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/repositories/sendpermitrepository.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
 import 'package:ilpverifyapp/pages/applicantprofiledetails%20copy.dart';
-import 'package:ilpverifyapp/pages/applicantprofiledetails.dart';
 import 'package:intl/intl.dart';
 
 import '../config/apis.dart';
@@ -332,7 +331,7 @@ class Scancontroller extends GetxController {
         var ispermitnumvalided =
             await getiilpdata(permitnum: scannedModel!.permitNo);
         if (ispermitnumvalided) {
-          // Get.off(()=>const ApplicantProfileDetails());
+          Get.to(() => const ApplicantProfileDetails2());
           _iswaitingfornextpage = false;
           update();
         } else {

@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -5,9 +6,9 @@ import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/widget/profile.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+
 import '../config/usecase.dart';
 import '../widget/shimmer.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 class ApplicantProfileDetails2 extends StatelessWidget {
   const ApplicantProfileDetails2({super.key});
@@ -106,6 +107,8 @@ class ApplicantProfileDetails2 extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
@@ -113,18 +116,15 @@ class ApplicantProfileDetails2 extends StatelessWidget {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
-                                                const SizedBox(
-                                                  height: 20,
-                                                ),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
                                                           left: 20),
                                                   child: Container(
-                                                    height: 100,
+                                                    height: 125,
                                                     width: 100,
                                                     decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
+                                                      // shape: BoxShape.circle,
                                                       // borderRadius:
                                                       //     BorderRadius.circular(30),
                                                       border: Border.all(
@@ -928,11 +928,18 @@ class ApplicantProfileDetails2 extends StatelessWidget {
                               : controller.isvalided
                                   ? Center(
                                       child: Image.asset(
-                                        'assets/images/verified.png',
+                                        'assets/images/validseal.png',
                                         height: 150,
                                       ),
                                     )
-                                  : const SizedBox(),
+                                  : controller.isexpired
+                                      ? Center(
+                                          child: Image.asset(
+                                            'assets/images/expiredseal.png',
+                                            height: 150,
+                                          ),
+                                        )
+                                      : const SizedBox(),
                         )
                       ]),
                     ),
