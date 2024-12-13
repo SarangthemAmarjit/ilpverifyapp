@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/const/enum.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/pages/HomePage.dart';
+import 'package:ilpverifyapp/pages/homepages/profile.dart';
 
 import 'homepages/verifiedlist.dart';
 
@@ -21,11 +23,11 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = [
     const HomePage(), // Replace with your actual HomePage implementation
     const VerifiedListPage(),
-    const SizedBox.shrink(), // Placeholder for logout button; it won't navigate
+    const ProfilePage(), // Placeholder for logout button; it won't navigate
   ];
 
   void _onItemTapped(int index) {
-    if (index == 2) {
+    if (index == 3) {
       _showLogoutDialog();
     } else {
       setState(() {
@@ -42,7 +44,13 @@ class _MainScreenState extends State<MainScreen> {
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, s) {
           return AlertDialog(
-            title: const Text('Confirm Logout'),
+                   title: Row(
+                                             children: [
+                                                      Icon(FontAwesomeIcons.arrowRightFromBracket,size: 14,),
+                                                      SizedBox(width: 10,),
+                                               const Text('Logout'),
+                                             ],
+                                           ),
             content: const Text('Are you sure you want to log out?'),
             actions: [
               TextButton(
@@ -77,6 +85,12 @@ class _MainScreenState extends State<MainScreen> {
           style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
         ),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: IconButton(icon: const Icon(FontAwesomeIcons.powerOff,size: 16,),onPressed:(){_onItemTapped(3);},),
+          )
+        ],
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -96,8 +110,8 @@ class _MainScreenState extends State<MainScreen> {
             label: ' Permits',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.logout),
-            label: 'Log Out',
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,

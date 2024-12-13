@@ -53,6 +53,7 @@ class Scancontroller extends GetxController {
   verifylistFilter verifiedList = verifylistFilter.all;
   var isConnected = false.obs;
   bool permitlistLoading = false;
+  bool scanStart = false;
     // Connectivity instance
   final Connectivity _connectivity =
       Connectivity(); // Observable to track location status
@@ -63,6 +64,7 @@ class Scancontroller extends GetxController {
     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     checkLocationPermission(); // Call permission check when the controller initializes
     getMyPermits();
+    setsegmenttype(type: SegmentType.scan);
   }
 
   void resetbools() {
@@ -146,21 +148,21 @@ class Scancontroller extends GetxController {
     update();
   }
 
-void listenScan(){
+// void listenScan(){
 
-   controller = MobileScannerController(
-    formats: const [BarcodeFormat.qrCode],
-  );
-  if (controller!=null) {
-  controller!.barcodes.listen((event) async{
-    if(event.barcodes.first.displayValue!=null && event.barcodes.first.displayValue!.isNotEmpty){
-      print("In scanner scan not empty");
-        await startQRScan(event.barcodes.first.displayValue!);
+//    controller = MobileScannerController(
+//     formats: const [BarcodeFormat.qrCode],
+//   );
+//   if (controller!=null) {
+//   controller!.barcodes.listen((event) async{
+//     if(event.barcodes.first.displayValue!=null && event.barcodes.first.displayValue!.isNotEmpty){
+//       print("In scanner scan not empty");
+//         await startQRScan(event.barcodes.first.displayValue!);
         
-    }
-  },);
-}
-} 
+//     }
+//   },);
+// }
+// } 
 
   void verifyiilpdata() async {
     String? loc;
@@ -285,27 +287,26 @@ void listenScan(){
   }
 
   // Method to start QR scan
-  Future<void> startQRScan(String barcodeScanRes) async {
+  Future<void> startQRScan() async {
+ 
+    String barcodeScanRes;
 
-         // Get.off(()=>const ApplicantProfileDetails());
-    // String barcodeScanRes;
-
-    // try {
-    //   barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
         
-    //     '#ff6666', // Scanner overlay color
-    //     'Cancel', // Cancel button text
-    //     true, // Show flash icon
-    //     ScanMode.QR, // Set scan mode to QR
-    //   );
-    // } on PlatformException {
-    //   barcodeScanRes = 'Failed to start QR scanner.';
-    //   Get.snackbar("Error", "Failed to start QR scanner.",
-    //       backgroundColor: const Color.fromARGB(255, 233, 92, 92),
-    //       colorText: Colors.white,
-    //       snackPosition: SnackPosition.BOTTOM);
-    //   return;
-    // }
+        '#ff6666', // Scanner overlay color
+        'Cancel', // Cancel button text
+        true, // Show flash icon
+        ScanMode.QR, // Set scan mode to QR
+      );
+    } on PlatformException {
+      barcodeScanRes = 'Failed to start QR scanner.';
+      Get.snackbar("Error", "Failed to start QR scanner.",
+          backgroundColor: const Color.fromARGB(255, 233, 92, 92),
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
 
     if (barcodeScanRes.isNotEmpty && barcodeScanRes != '-1') {
       _iswaitingfornextpage = true;
@@ -326,7 +327,7 @@ void listenScan(){
           if(controller!.barcodes.isBroadcast){
             
           }
-          // Get.off(()=>const ApplicantProfileDetails());
+          Get.off(()=>const ApplicantProfileDetails());
           _iswaitingfornextpage = false;
           update();
         } else {

@@ -172,9 +172,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Get.to(() =>
-                                          const BarcodeScannerWithOverlay());
-                                      controller.listenScan();
+                                      // Get.to(() =>
+                                      //     const BarcodeScannerWithOverlay());
+                                      controller.startQRScan();
                                     },
                                     child: Card(
                                       color: Colors.white,

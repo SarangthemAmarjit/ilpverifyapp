@@ -14,7 +14,7 @@ void main() {
 
   // Initialize LocationController
   Get.put(LoginController()); // Registers the controller as a singleton
-  Get.put(Scancontroller()); // Registers the controller as a singleton
+  Get.put(Scancontroller());  // Registers the controller as a singleton
   runApp(const MyApp());
 }
 

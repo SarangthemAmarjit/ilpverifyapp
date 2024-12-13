@@ -103,13 +103,14 @@ class VerifiedListPage extends StatelessWidget {
 
 class RoundedCard extends StatelessWidget {
   const RoundedCard({
-    super.key, this.title,this.isSelected = false, this.onPress, this.child, this.padding,this.isGradient = false,
+    super.key, this.title,this.isSelected = false, this.onPress, this.child, this.padding,this.isGradient = false, this.margin,
   });
   final String? title;
   final bool isSelected;
   final VoidCallback? onPress;
   final Widget? child;
   final EdgeInsets? padding;
+  final EdgeInsets? margin;
   final bool isGradient;
   @override
   Widget build(BuildContext context) {
@@ -117,7 +118,7 @@ class RoundedCard extends StatelessWidget {
       onTap: onPress,
       child: Container(
         
-        margin: const EdgeInsets.symmetric(horizontal: 4),
+        margin: margin??const EdgeInsets.symmetric(horizontal: 4),
         padding: padding??const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
         decoration: BoxDecoration(
         gradient:isSelected|| isGradient? LinearGradient(

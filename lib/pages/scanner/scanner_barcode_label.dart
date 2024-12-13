@@ -39,7 +39,7 @@ class ScannedBarcodeLabel extends StatelessWidget {
               
               child: Text("Validate"),
              onPressed: (){
-              scanctrl.startQRScan(scannedBarcodes.first.displayValue??"");
+              // scanctrl.startQRScan(scannedBarcodes.first.displayValue??"");
              },
              
              
