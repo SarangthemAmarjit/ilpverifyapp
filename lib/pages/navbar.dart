@@ -86,61 +86,83 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/images/logo.png',
-              height: 38,
-            ),
-            const Text(
-              'Verifier',
-              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
-            ),
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldExit = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Exit App'),
+            content: const Text('Are you sure you want to exit the app?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Exit'),
+              ),
+            ],
+          ),
+        );
+        return shouldExit ?? false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          // backgroundColor: const Color.fromARGB(255, 205, 240, 239),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/logo.png',
+                height: 38,
+              ),
+              const Text(
+                'Verifier',
+                style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
+              ),
+            ],
+          ),
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: IconButton(
+                icon: const Icon(
+                  FontAwesomeIcons.powerOff,
+                  size: 16,
+                ),
+                onPressed: () {
+                  _onItemTapped(3);
+                },
+              ),
+            )
           ],
         ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: IconButton(
-              icon: const Icon(
-                FontAwesomeIcons.powerOff,
-                size: 16,
-              ),
-              onPressed: () {
-                _onItemTapped(3);
-              },
+        body: _pages[_selectedIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          elevation: 10,
+          selectedFontSize: 16,
+          selectedItemColor: greencol,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.qr_code_scanner),
+              label: 'Home',
             ),
-          )
-        ],
-      ),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        elevation: 10,
-        selectedFontSize: 16,
-        selectedItemColor: greencol,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code_scanner),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: ' Permits',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: ' Permits',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
