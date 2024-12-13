@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:ilpverifyapp/model/repositories/authrepoimpl.dart';
+import 'package:ilpverifyapp/pages/loadingpage.dart';
 import 'package:ilpverifyapp/pages/loginpage.dart';
 import 'package:ilpverifyapp/pages/navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +27,8 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Future.delayed(const Duration(seconds: 1))
+        .whenComplete(() => FlutterNativeSplash.remove());
     checktoken();
     // Call permission check when the controller initializes
   }
@@ -40,20 +44,20 @@ class LoginController extends GetxController {
     Get.offAll(const LoginPage());
   }
 
-  void validateAndLogin() async {
-    Future.delayed(const Duration(seconds: 2)).whenComplete(() async {
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      String username = usernameController.text;
-      String password = passwordController.text;
-      //get login api
-      if (username.isEmpty || password.isEmpty) {
-        Get.back();
-        _showDialog("Error", "Username or Password cannot be empty.");
-      }
-      //  else if (username != correctUsername || password != correctPassword) {
-      //   _showDialog("Login Failed", "Incorrect Username or Password.");
-      // }
-      else {
+  void validateAndLogin(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String username = usernameController.text;
+    String password = passwordController.text;
+    //get login api
+    if (username.isEmpty || password.isEmpty) {
+      _showDialog("Error", "Username or Password cannot be empty.");
+    }
+    //  else if (username != correctUsername || password != correctPassword) {
+    //   _showDialog("Login Failed", "Incorrect Username or Password.");
+    // }
+    else {
+      showLoadingDialog(context: context);
+      Future.delayed(const Duration(seconds: 2)).whenComplete(() async {
         //res = {"String":"int"} {1 - sucess,-1 - error,3 - catch exception}
         Map<String, String?> res =
             await authenticationRepo.loginUser(username, password);
@@ -81,10 +85,9 @@ class LoginController extends GetxController {
           Get.back();
           _showDialog("Log In Error!", res.entries.first.key);
         }
-
-        // Navigate to the next screen
-      }
-    });
+      });
+      // Navigate to the next screen
+    }
   }
 
   void authenticate() {

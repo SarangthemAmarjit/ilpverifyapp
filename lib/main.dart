@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ilpverifyapp/const/constant.dart';
@@ -11,10 +12,11 @@ import 'package:ilpverifyapp/pages/authhandler.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-
+  FlutterNativeSplash.preserve(
+      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
   // Initialize LocationController
   Get.put(LoginController()); // Registers the controller as a singleton
-  Get.put(Scancontroller());  // Registers the controller as a singleton
+  Get.put(Scancontroller()); // Registers the controller as a singleton
   runApp(const MyApp());
 }
 
@@ -24,13 +26,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: "ILP VERIFIER",
+      title: "ILP SCANNER",
       theme: ThemeData(
-        
         // Use a Google Font for the entire app
         textTheme: GoogleFonts.kulimParkTextTheme(),
         // textTheme: GoogleFonts.montserratTextTheme(),
-        
+
         appBarTheme: AppBarTheme(
             toolbarHeight: 80, color: greencol, foregroundColor: Colors.white),
         elevatedButtonTheme: ElevatedButtonThemeData(

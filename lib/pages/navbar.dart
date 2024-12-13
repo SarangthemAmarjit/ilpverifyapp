@@ -119,7 +119,7 @@ class _MainScreenState extends State<MainScreen> {
                 height: 38,
               ),
               const Text(
-                'Verifier',
+                'Scanner',
                 style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
               ),
             ],

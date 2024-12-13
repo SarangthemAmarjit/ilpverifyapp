@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
-import 'package:ilpverifyapp/pages/loadingpage.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -212,8 +211,7 @@ class LoginPage extends StatelessWidget {
                           const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () {
-                              showLoadingDialog(context: context);
-                              controller.validateAndLogin();
+                              controller.validateAndLogin(context);
                             },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
