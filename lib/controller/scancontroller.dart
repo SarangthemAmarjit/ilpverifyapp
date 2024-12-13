@@ -13,9 +13,7 @@ import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/repositories/sendpermitrepository.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
-import 'package:ilpverifyapp/pages/applicantprofile.dart';
 import 'package:ilpverifyapp/pages/applicantprofiledetails%20copy.dart';
-import 'package:ilpverifyapp/pages/applicantprofiledetails.dart';
 import 'package:intl/intl.dart';
 
 import '../config/apis.dart';
@@ -25,6 +23,8 @@ import '../model/permit.dart';
 class Scancontroller extends GetxController {
   final PermitRepoImpl permitApiRepo = PermitRepoImpl();
   IlPmodel? allgetiltpdata;
+  IlPmodel? _currentPermitData;
+  IlPmodel? get getcurrentPermitData=>_currentPermitData;
   final permitController = TextEditingController();
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
@@ -62,6 +62,8 @@ class Scancontroller extends GetxController {
   var isConnected = false.obs;
   bool permitlistLoading = false;
   bool scanStart = false;
+  bool isFetchPermit = false;
+  String fetchPermitmessage = "";
     // Connectivity instance
   final Connectivity _connectivity =
       Connectivity(); // Observable to track location status
@@ -416,6 +418,20 @@ class Scancontroller extends GetxController {
       }
     }
   }
+
+  void fetchPermitById(String permitNo)async{
+
+isFetchPermit = true;
+update();
+Map<String,IlPmodel?> x = await permitApiRepo.fetchPermitData(permitNo);
+_currentPermitData = x.entries.first.value;
+
+fetchPermitmessage = x.entries.first.key;
+isFetchPermit = false;
+update();
+  }
+
+
 
   Future<void> checkLocationPermission() async {
     LocationPermission permission;

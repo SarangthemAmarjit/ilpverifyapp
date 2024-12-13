@@ -322,28 +322,55 @@ class ApplicantProfileDetails2 extends StatelessWidget {
                                                                 vertical: 5),
                                                         child:
                                                             LinearPercentIndicator(
+                                                              
                                                           animationDuration:
                                                               300,
                                                           animateToInitialPercent:
                                                               true,
                                                           animation: true,
                                                           lineHeight: 20.0,
-                                                          percent: remainingDays(
+                                                          percent:
+                                                          (totalDays(controller
+                                                                      .allgetiltpdata!
+                                                                      .validDate,controller
+                                                                      .allgetiltpdata!
+                                                                      .issueDate) - (remainingDays(
                                                                   controller
                                                                       .allgetiltpdata!
-                                                                      .validDate) /
-                                                              validDays(
-                                                                  expireddate:
-                                                                      controller
-                                                                          .allgetiltpdata!
-                                                                          .validDate,
-                                                                  issuedate: controller
+                                                                      .validDate) )
+                                                             )/totalDays(controller
+                                                                      .allgetiltpdata!
+                                                                      .validDate,controller
                                                                       .allgetiltpdata!
                                                                       .issueDate), // Pass calculated progress
                                                           backgroundColor:
-                                                              Colors.grey[300],
+                                                              Colors.grey[500],
                                                           progressColor:
-                                                              Colors.green,
+                                                              (totalDays(controller
+                                                                      .allgetiltpdata!
+                                                                      .validDate,controller
+                                                                      .allgetiltpdata!
+                                                                      .issueDate) - (remainingDays(
+                                                                  controller
+                                                                      .allgetiltpdata!
+                                                                      .validDate) )
+                                                             )/totalDays(controller
+                                                                      .allgetiltpdata!
+                                                                      .validDate,controller
+                                                                      .allgetiltpdata!
+                                                                      .issueDate)<0.6?   Colors.green: (totalDays(controller
+                                                                      .allgetiltpdata!
+                                                                      .validDate,controller
+                                                                      .allgetiltpdata!
+                                                                      .issueDate) - (remainingDays(
+                                                                  controller
+                                                                      .allgetiltpdata!
+                                                                      .validDate) )
+                                                             )/totalDays(controller
+                                                                      .allgetiltpdata!
+                                                                      .validDate,controller
+                                                                      .allgetiltpdata!
+                                                                      .issueDate)<0.8?Colors.orangeAccent:Colors.orange[800],
                                                           barRadius:
                                                               const Radius
                                                                   .circular(10),

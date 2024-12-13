@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart'as http;
 import 'package:ilpverifyapp/config/dummy.dart';
+import 'package:ilpverifyapp/model/ilpmodel.dart';
 
 import '../../config/apis.dart';
 import '../permit.dart';
@@ -57,7 +58,7 @@ Future<Map<String,dynamic>> updatePermit(Permit permit) async {
 }
 
 Future<List<Permit>> fetchPermits() async {
-  final url = Uri.parse('$api/api/permits'); // Replace with your API endpoint
+  // final url = Uri.parse('$api/api/permits'); // Replace with your API endpoint
 
   // try {
   //   final response = await http.get(
@@ -82,7 +83,27 @@ Future<List<Permit>> fetchPermits() async {
   return dummypermit;
 }
 
+Future<Map<String,IlPmodel?>> fetchPermitData(String permitnum)async{
+IlPmodel? d ;
+    try {
+      final response = await http.get(Uri.parse('$permitapi$permitnum'));
 
+      if (response.statusCode >= 200 && response.statusCode<300) {
+        print(response.body);
+
+       d=  ilPmodelFromJson(
+            response.body); // Assuming this function is parsing the response
+      return {"Permit Fetch":d};
+      
+      }else{
+        String s = response.statusCode>400 && response.statusCode<500?response.statusCode==401?"Unauthorized":"Permit not found": response.statusCode>=500?"Error Fetching data from the server":"Some failure oocured when fetching data";
+            return {s:null};
+      }
+    } catch (e) {
+        return {"Failed to fetch permit":null};
+    }
+
+}
 
 
 }

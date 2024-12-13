@@ -12,6 +12,16 @@ int remainingDays(DateTime targetDate) {
   // Return the result
   return remainingDays;
 }
+int totalDays(DateTime targetDate,DateTime issueDate) {
+  // Get today's date
+
+  
+  // Calculate the difference in days
+  int remainingDays = targetDate.difference(issueDate).inDays;
+  
+  // Return the result
+  return remainingDays;
+}
 
 int validDays({required DateTime expireddate,required DateTime issuedate}) {
   // Get today's date

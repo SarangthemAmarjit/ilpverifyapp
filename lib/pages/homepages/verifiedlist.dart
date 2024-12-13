@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:ilpverifyapp/const/enum.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/pages/HomePage.dart';
+import 'package:ilpverifyapp/pages/permitdetails.dart';
 import 'package:ilpverifyapp/widget/shimmerlist.dart';
 
 
@@ -84,10 +85,17 @@ class VerifiedListPage extends StatelessWidget {
                    ).animate().shimmer(duration: Durations.extralong2) :ListView(
                   physics: const NeverScrollableScrollPhysics(),
                  shrinkWrap: true,
-                  children:scancontroller.getmypermitsFilter.map((d)=> Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    
-                    child: ListTile(title: Text(d.permitId) ,
+                  children:scancontroller.getmypermitsFilter.map((d)=> RoundedCard(
+                   
+                    margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+
+                    child: ListTile(
+                      onTap: (){
+                        scancontroller.fetchPermitById('TAL202412050058783');
+                        Get.to(()=>const PermitDetailsPage());
+                      },
+                      leading: Icon(FontAwesomeIcons.qrcode),
+                      title: Text(d.permitId) ,
                     subtitle: Text('${d.dateTime?.day}/${d.dateTime?.month}/${d.dateTime?.year}'),
                     ),
                   ),
