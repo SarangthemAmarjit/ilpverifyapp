@@ -8,23 +8,31 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:ilpverifyapp/config/usecase.dart';
-import 'package:ilpverifyapp/const/enum.dart';
+import 'package:ilpverifyapp/const/constant.dart';
+import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/repositories/sendpermitrepository.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
+import 'package:ilpverifyapp/pages/applicantprofile.dart';
+import 'package:ilpverifyapp/pages/applicantprofiledetails%20copy.dart';
 import 'package:ilpverifyapp/pages/applicantprofiledetails.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../config/apis.dart';
+import '../const/enum.dart';
 import '../model/permit.dart';
 
 class Scancontroller extends GetxController {
-
-  MobileScannerController? controller;
   final PermitRepoImpl permitApiRepo = PermitRepoImpl();
   IlPmodel? allgetiltpdata;
   final permitController = TextEditingController();
+  int _selectedIndex = 0;
+  int get selectedIndex => _selectedIndex;
+
+  String _selectedOption = 'No'; // To store the selected radio button value
+  String get selectedOption => _selectedOption;
+  String? _cardstatusname;
+  String? get cardstatusname => _cardstatusname;
 
   bool _iswaitingfornextpage = false;
   bool get iswaitingfornextpage => _iswaitingfornextpage;
@@ -65,6 +73,59 @@ class Scancontroller extends GetxController {
     checkLocationPermission(); // Call permission check when the controller initializes
     getMyPermits();
     setsegmenttype(type: SegmentType.scan);
+  }
+
+  void setcardstatus({required String name}) {
+    _cardstatusname = name;
+    update();
+  }
+
+  void setverifiedoption({required String name}) {
+    _selectedOption = name;
+    update();
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, s) {
+          return AlertDialog(
+            title: const Text('Confirm Logout'),
+            content: const Text('Are you sure you want to log out?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Get.find<LoginController>().logout();
+                  resetbools();
+                },
+                child: const Text('Log Out'),
+              ),
+            ],
+          );
+        });
+      },
+    );
+  }
+
+  void onItemTapped(int index, BuildContext context) {
+    if (index == 2) {
+      _showLogoutDialog(context);
+    } else {
+      _selectedIndex = index;
+      update();
+    }
+    if (index == 1) {
+      _isscantab = true;
+      update();
+    }
   }
 
   void resetbools() {
@@ -204,6 +265,8 @@ class Scancontroller extends GetxController {
         //   update();
         // }
         log("Name : ${allgetiltpdata!.name}");
+
+        Get.to(() => const ApplicantProfileDetails2());
         _isverifybuttonpress = false;
         update();
         // Get.to(const ApplicantProfileDetails());
@@ -230,8 +293,7 @@ class Scancontroller extends GetxController {
 
   Future<bool> getiilpdata({required String permitnum}) async {
     try {
-      final response = await http.get(Uri.parse(
-          '$permitapi$permitnum'));
+      final response = await http.get(Uri.parse('$permitapi$permitnum'));
 
       if (response.statusCode == 200) {
         print(response.body);
@@ -288,7 +350,7 @@ class Scancontroller extends GetxController {
 
   // Method to start QR scan
   Future<void> startQRScan() async {
- 
+    // Get.off(()=>const ApplicantProfileDetails());
     String barcodeScanRes;
 
     try {
@@ -324,10 +386,7 @@ class Scancontroller extends GetxController {
         var ispermitnumvalided =
             await getiilpdata(permitnum: scannedModel!.permitNo);
         if (ispermitnumvalided) {
-          if(controller!.barcodes.isBroadcast){
-            
-          }
-          Get.off(()=>const ApplicantProfileDetails());
+          Get.to(()=>const ApplicantProfileDetails2());
           _iswaitingfornextpage = false;
           update();
         } else {
@@ -357,11 +416,7 @@ class Scancontroller extends GetxController {
       }
     }
   }
-  void disposeController(){
-    if(controller!=null){
-      controller!.dispose();
-    }
-  }
+
   Future<void> checkLocationPermission() async {
     LocationPermission permission;
 

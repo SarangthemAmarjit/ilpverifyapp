@@ -23,7 +23,6 @@ class ProfileUpdate extends StatelessWidget {
               color: Colors.white.withOpacity(0.7)),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,7 +48,7 @@ class ProfileUpdate extends StatelessWidget {
                 ),
                 Flexible(
                   child: Text(text2,
-                   textAlign: TextAlign.right,
+                      textAlign: TextAlign.right,
                       overflow: TextOverflow.visible,
                       style: GoogleFonts.kreon(fontSize: 18)),
                 ),

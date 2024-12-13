@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ilpverifyapp/const/enum.dart';
+import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
 
 class LoginPage extends StatelessWidget {
@@ -70,7 +70,7 @@ class LoginPage extends StatelessWidget {
                     color: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         side: const BorderSide(
-                            color: Color.fromARGB(255, 153, 153, 153)),
+                            color: Color.fromARGB(255, 192, 191, 191)),
                         borderRadius: BorderRadius.circular(15)),
                     elevation: 10,
                     child: Container(
@@ -78,7 +78,7 @@ class LoginPage extends StatelessWidget {
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         border: Border.all(
-                            color: const Color.fromARGB(255, 192, 191, 191)),
+                            color: const Color.fromARGB(255, 171, 171, 171)),
                         color: const Color.fromARGB(255, 218, 225, 209)
                             .withOpacity(0.5),
                         borderRadius: BorderRadius.circular(15),
@@ -129,6 +129,13 @@ class LoginPage extends StatelessWidget {
                               filled: true,
                               fillColor:
                                   const Color.fromARGB(255, 233, 231, 231),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide:
+                                      BorderSide(color: greencoltextfocus)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: bordercolor)),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -154,6 +161,13 @@ class LoginPage extends StatelessWidget {
                                 filled: true,
                                 fillColor:
                                     const Color.fromARGB(255, 233, 231, 231),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide:
+                                        BorderSide(color: greencoltextfocus)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(color: bordercolor)),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),

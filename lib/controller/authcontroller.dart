@@ -56,14 +56,27 @@ class LoginController extends GetxController {
           await authenticationRepo.loginUser(username, password);
 
       //set values to shared preferences is login is successfull
-      if (res.entries.first.value !=null) {
-        _islogin = true;
+      // if (res.entries.first.value !=null) {
+      //   _islogin = true;
+      //   pref.setString('token', username);
+    
+      //   authenticate();
+      //   update();
+      //   _showDialog(res.entries.first.key, "Welcome, $username!");
+      // } 
+      //Demo Login Details
+
+        if (username == correctUsername || password == correctPassword) {
+    _islogin = true;
         pref.setString('token', username);
     
         authenticate();
         update();
-        _showDialog(res.entries.first.key, "Welcome, $username!");
-      } else {
+        _showDialog('Login Successfully', "Welcome, $username!");
+    }
+      
+      
+      else {
         _showDialog("Log In Error!", res.entries.first.key);
       }
 

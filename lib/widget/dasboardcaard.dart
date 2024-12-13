@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ilpverifyapp/const/constant.dart';
 
 class DashboardCard extends StatelessWidget {
   const DashboardCard({super.key});
@@ -67,11 +68,15 @@ class DashbaordCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: bordercolor),
+          borderRadius: BorderRadius.circular(10)),
       color: Colors.white,
       elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Icon(
             //   FontAwesomeIcons.triangleExclamation,
@@ -83,31 +88,33 @@ class DashbaordCardWidget extends StatelessWidget {
                   0.5, // Value from 0.0 (completely transparent) to 1.0 (fully opaque)
               child: Image.asset(
                 icon,
-                height: 34,
+                height: title == 'Expired' ? 30 : 35,
               ),
             ),
             const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    title,
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
-                  Text(
-                    "$number ${number<2?"Card":"Cards"}", // Example count
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: numcolor),
-                  ),
-                ],
-              ),
+                ),
+                Text(
+                  
+                  number > 1
+                      ? "$number Cards"
+                      : "$number Card", // Example count
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: numcolor),
+                ),
+              ],
             ),
           ],
         ),

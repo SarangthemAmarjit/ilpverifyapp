@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ilpverifyapp/const/enum.dart';
+import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/pages/authhandler.dart';

@@ -4,12 +4,10 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:ilpverifyapp/const/enum.dart';
+import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/widget/dasboardcaard.dart';
 import 'package:lottie/lottie.dart';
-
-import 'scanner/scanneroverlay.dart';
 
 class HomePage extends StatefulWidget {
   static const String routename = "HomePage";
@@ -32,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     Scancontroller controller = Get.find<Scancontroller>();
 
     return SizedBox(
-
+ 
       child: GetBuilder<Scancontroller>(builder: (_) {
         log("isscantab : ${controller.isscantab}");
         return controller.iswaitingfornextpage
@@ -118,9 +116,7 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(7),
                           ),
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                color:
-                                    const Color.fromARGB(255, 197, 196, 196)),
+                            border: Border.all(color: bordercolorsecondary),
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(8),
                             // gradient: const LinearGradient(
@@ -254,6 +250,8 @@ class _HomePageState extends State<HomePage> {
                                   TextFormField(
                                     controller: controller.permitController,
                                     decoration: InputDecoration(
+                                      disabledBorder:
+                                          const OutlineInputBorder(),
                                       labelStyle: const TextStyle(
                                         color:
                                             Color.fromARGB(179, 128, 127, 127),
@@ -267,6 +265,17 @@ class _HomePageState extends State<HomePage> {
                                       filled: true,
                                       fillColor: const Color.fromARGB(
                                           255, 239, 241, 234),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: bordercolor, width: 1.0),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: greencolsecondary,
+                                            width: 2.0),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
