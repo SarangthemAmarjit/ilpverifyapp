@@ -14,6 +14,7 @@ import 'package:ilpverifyapp/model/ilpmodel.dart';
 import 'package:ilpverifyapp/model/repositories/sendpermitrepository.dart';
 import 'package:ilpverifyapp/model/scannermodel.dart';
 import 'package:ilpverifyapp/pages/applicantprofiledetails%20copy.dart';
+import 'package:ilpverifyapp/pages/loadingpage.dart';
 import 'package:intl/intl.dart';
 
 import '../config/apis.dart';
@@ -24,7 +25,7 @@ class Scancontroller extends GetxController {
   final PermitRepoImpl permitApiRepo = PermitRepoImpl();
   IlPmodel? allgetiltpdata;
   IlPmodel? _currentPermitData;
-  IlPmodel? get getcurrentPermitData=>_currentPermitData;
+  IlPmodel? get getcurrentPermitData => _currentPermitData;
   final permitController = TextEditingController();
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
@@ -64,7 +65,7 @@ class Scancontroller extends GetxController {
   bool scanStart = false;
   bool isFetchPermit = false;
   String fetchPermitmessage = "";
-    // Connectivity instance
+  // Connectivity instance
   final Connectivity _connectivity =
       Connectivity(); // Observable to track location status
   @override
@@ -105,8 +106,14 @@ class Scancontroller extends GetxController {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  Get.find<LoginController>().logout();
-                  resetbools();
+                  showLoadingDialog(context: context);
+                  Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+                     // ignore: use_build_context_synchronously
+                    
+                    Get.find<LoginController>().logout();
+                    resetbools();
+                   
+                  });
                 },
                 child: const Text('Log Out'),
               ),
@@ -124,7 +131,7 @@ class Scancontroller extends GetxController {
       _selectedIndex = index;
       update();
     }
-    if (index == 1||index == 2) {
+    if (index == 1 || index == 2) {
       _isscantab = true;
       update();
     }
@@ -412,19 +419,16 @@ class Scancontroller extends GetxController {
     }
   }
 
-  void fetchPermitById(String permitNo)async{
+  void fetchPermitById(String permitNo) async {
+    isFetchPermit = true;
+    update();
+    Map<String, IlPmodel?> x = await permitApiRepo.fetchPermitData(permitNo);
+    _currentPermitData = x.entries.first.value;
 
-isFetchPermit = true;
-update();
-Map<String,IlPmodel?> x = await permitApiRepo.fetchPermitData(permitNo);
-_currentPermitData = x.entries.first.value;
-
-fetchPermitmessage = x.entries.first.key;
-isFetchPermit = false;
-update();
+    fetchPermitmessage = x.entries.first.key;
+    isFetchPermit = false;
+    update();
   }
-
-
 
   Future<void> checkLocationPermission() async {
     LocationPermission permission;

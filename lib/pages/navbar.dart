@@ -22,6 +22,7 @@ class MainScreen extends StatelessWidget {
         final shouldExit = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
+            backgroundColor: Colors.white,
             title: const Text('Exit App'),
             content: const Text('Are you sure you want to exit the app?'),
             actions: [
