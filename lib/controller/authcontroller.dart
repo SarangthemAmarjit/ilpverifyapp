@@ -76,13 +76,13 @@ class LoginController extends GetxController {
         if (username == correctUsername || password == correctPassword) {
           _islogin = true;
           pref.setString('token', username);
-
-          authenticate();
           update();
+          Navigator.of(context).pop();
+          authenticate();
 
           _showDialog('Login Successfully', "Welcome, $username!");
         } else {
-          Get.back();
+        Navigator.of(context).pop();
           _showDialog("Log In Error!", res.entries.first.key);
         }
       });
@@ -92,7 +92,6 @@ class LoginController extends GetxController {
 
   void authenticate() {
     if (_islogin) {
-      Get.back();
       Get.off(() => const MainScreen());
     }
   }
@@ -126,6 +125,7 @@ class LoginController extends GetxController {
   void _showDialog(String title, String message) {
     Get.dialog(
       AlertDialog(
+        backgroundColor: Colors.white,
         title: Text(title),
         content: Text(message),
         actions: [
