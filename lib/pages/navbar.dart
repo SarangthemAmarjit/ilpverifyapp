@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
-import 'package:ilpverifyapp/pages/HomePage.dart';
+import 'package:ilpverifyapp/pages/homepages/dashboard.dart';
 import 'package:ilpverifyapp/pages/homepages/profile.dart';
 import 'package:ilpverifyapp/pages/loadingpage.dart';
 

@@ -101,61 +101,36 @@ class ProfilePage extends StatelessWidget {
                   title: Text("App Version"),
                   subtitle: Text("1.0.0"),
                 ),
-              ),const SizedBox(height: 20,),
-                           Row(
-                             children: [
-                               RoundedCard(
-                                onPress: (){
-                                   LoginController logcontroller = Get.find<LoginController>();
-                               
-                                   showDialog(
-                                     context: context,
-                                     builder: (BuildContext context) {
-                                       return StatefulBuilder(builder: (context, s) {
-                                         return AlertDialog(
-                                           title: Row(
-                                             children: [
-                                                      Icon(FontAwesomeIcons.arrowRightFromBracket,size: 14,),
-                                                      SizedBox(width: 10,),
-                                               const Text('Logout'),
-                                             ],
-                                           ),
-                                           content: const Text('Are you sure you want to log out?'),
-                                           actions: [
-                                             TextButton(
-                                               onPressed: () {
-                                                 Navigator.of(context).pop();
-                                               },
-                                               child: const Text('Cancel'),
-                                             ),
-                                             TextButton(
-                                               onPressed: () {
-                                                 Navigator.of(context).pop();
-                                                 logcontroller.logout();
-                                                 controller.resetbools();
-                                               },
-                                               child: Text('Log Out'),
-                                             ),
-                                           ],
-                                         );
-                                       });
-                                     },
-                                   );
-                                 
-                                },
-                                               margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                                               child: Row(
-                                                 mainAxisAlignment: MainAxisAlignment.start,
-                                                 mainAxisSize: MainAxisSize.min,
-                                                 children: [
-                                                        Icon(FontAwesomeIcons.arrowRightFromBracket,size: 14,color: Colors.grey,),
-                                                        SizedBox(width: 10,),
-                                                   const Text("Log Out"),
-                                                 ],
-                                               )
-                                             ),
-                             ],
-                           )
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  RoundedCard(
+                      onPress: () {
+                     controller.onItemTapped(3, context);
+        
+                      },
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.arrowRightFromBracket,
+                            size: 14,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          const Text("Log Out"),
+                        ],
+                      )),
+                ],
+              )
             ],
           ),
         ),

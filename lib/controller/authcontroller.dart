@@ -65,7 +65,7 @@ class LoginController extends GetxController {
     // }
     else {
       showLoadingDialog(context: context);
-      Future.delayed(const Duration(seconds: 2)).whenComplete(() async {
+      Future.delayed(const Duration(milliseconds: 1500)).whenComplete(() async {
         //res = {"String":"int"} {1 - sucess,-1 - error,3 - catch exception}
         Map<String, String?> res =
             await authenticationRepo.loginUser(username, password);
@@ -110,7 +110,7 @@ class LoginController extends GetxController {
 
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (pref.containsKey('token')) {
-      await Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+       Future.delayed(const Duration(milliseconds: 1500)).whenComplete(() {
         _islogin = true;
 
         _isauthchecking = false;
@@ -118,7 +118,7 @@ class LoginController extends GetxController {
         log('trueeeee');
       });
     } else {
-      await Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+       Future.delayed(const Duration(milliseconds: 1500)).whenComplete(() {
         _islogin = false;
 
         _isauthchecking = false;

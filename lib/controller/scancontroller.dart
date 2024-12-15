@@ -109,7 +109,7 @@ class Scancontroller extends GetxController {
                 onPressed: () {
                   Navigator.of(context).pop();
                   showLoadingDialog(context: context);
-                  Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+                  Future.delayed(const Duration(seconds: 1)).whenComplete(() {
                     // ignore: use_build_context_synchronously
 
                     Get.find<LoginController>().logout();

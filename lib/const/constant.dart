@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ilpverifyapp/pages/HomePage.dart';
+import 'package:ilpverifyapp/pages/homepages/dashboard.dart';
 import 'package:ilpverifyapp/pages/homepages/profile.dart';
 import 'package:ilpverifyapp/pages/homepages/verifiedlist.dart';
 
