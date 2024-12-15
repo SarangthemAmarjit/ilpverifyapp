@@ -7,10 +7,10 @@ class LoadingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xfff4fff5),
       body: Center(
-        child: Lottie.asset(
-          'assets/images/loading.json',
+        child: Image.asset(
+          'assets/images/loading2.gif',
           height: 120,
         ),
       ),

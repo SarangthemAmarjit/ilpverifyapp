@@ -27,10 +27,18 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    Future.delayed(const Duration(seconds: 1))
-        .whenComplete(() => FlutterNativeSplash.remove());
-    checktoken();
+    removesplash();
+
     // Call permission check when the controller initializes
+  }
+
+  void removesplash() async {
+    log('ready in 1...');
+    await Future.delayed(const Duration(milliseconds: 1))
+        .whenComplete(() => FlutterNativeSplash.remove());
+    await Future.delayed(const Duration(seconds: 2))
+        .whenComplete(() => checktoken());
+    log('complete splash...');
   }
 
   void setpasswordvisibility() {
@@ -82,7 +90,7 @@ class LoginController extends GetxController {
 
           _showDialog('Login Successfully', "Welcome, $username!");
         } else {
-        Navigator.of(context).pop();
+          Navigator.of(context).pop();
           _showDialog("Log In Error!", res.entries.first.key);
         }
       });
@@ -102,7 +110,7 @@ class LoginController extends GetxController {
 
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (pref.containsKey('token')) {
-      Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+      await Future.delayed(const Duration(seconds: 2)).whenComplete(() {
         _islogin = true;
 
         _isauthchecking = false;
@@ -110,7 +118,7 @@ class LoginController extends GetxController {
         log('trueeeee');
       });
     } else {
-      Future.delayed(const Duration(seconds: 2)).whenComplete(() {
+      await Future.delayed(const Duration(seconds: 2)).whenComplete(() {
         _islogin = false;
 
         _isauthchecking = false;

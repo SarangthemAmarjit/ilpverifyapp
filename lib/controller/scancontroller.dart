@@ -95,6 +95,7 @@ class Scancontroller extends GetxController {
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, s) {
           return AlertDialog(
+            backgroundColor: Colors.white,
             title: const Text('Confirm Logout'),
             content: const Text('Are you sure you want to log out?'),
             actions: [
@@ -109,11 +110,10 @@ class Scancontroller extends GetxController {
                   Navigator.of(context).pop();
                   showLoadingDialog(context: context);
                   Future.delayed(const Duration(seconds: 2)).whenComplete(() {
-                     // ignore: use_build_context_synchronously
-                    
+                    // ignore: use_build_context_synchronously
+
                     Get.find<LoginController>().logout();
                     resetbools();
-                   
                   });
                 },
                 child: const Text('Log Out'),

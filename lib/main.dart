@@ -8,12 +8,13 @@ import 'package:ilpverifyapp/const/constant.dart';
 import 'package:ilpverifyapp/controller/authcontroller.dart';
 import 'package:ilpverifyapp/controller/scancontroller.dart';
 import 'package:ilpverifyapp/pages/authhandler.dart';
+import 'package:ilpverifyapp/pages/splashscreenpage.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   HttpOverrides.global = MyHttpOverrides();
-  FlutterNativeSplash.preserve(
-      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+
   // Initialize LocationController
   Get.put(LoginController()); // Registers the controller as a singleton
   Get.put(Scancontroller()); // Registers the controller as a singleton
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
         primaryTextTheme: GoogleFonts.montserratTextTheme(),
       ),
       debugShowCheckedModeBanner: false,
-      home: const AuthhandlerPage(),
+      home: const GifSplashScreen(),
     );
   }
 }
